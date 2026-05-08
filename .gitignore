@@ -1,0 +1,17 @@
+# ProcessWire runtime files — never commit these
+/site/assets/files/*
+!/site/assets/files/.htaccess
+
+/site/assets/logs/*
+!/site/assets/logs/.htaccess
+
+/site/assets/cache/*
+/site/assets/sessions/*
+/site/assets/backups/*
+
+# Database credentials — create this manually on the server
+/site/config.php
+
+# OS junk
+.DS_Store
+Thumbs.db

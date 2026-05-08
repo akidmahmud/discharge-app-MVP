@@ -1,0 +1,61 @@
+@import url('/site/templates/styles/tokens.css');
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.40);
+  z-index: 40;
+}
+
+.modal-backdrop.is-open {
+  display: block;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  display: none;
+  width: calc(100vw - (var(--space-6) * 2));
+  max-width: 100%;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-elevated);
+  box-shadow: var(--shadow-lg);
+  z-index: 41;
+}
+
+.modal.is-open {
+  display: block;
+}
+
+.modal--md {
+  max-width: 600px;
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6) 0;
+}
+
+.modal__body {
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+  padding: var(--space-5) var(--space-6);
+}
+
+.modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: 0 var(--space-6) var(--space-6);
+}
+
+body.modal-open {
+  overflow: hidden;
+}

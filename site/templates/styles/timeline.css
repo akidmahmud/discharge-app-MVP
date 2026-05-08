@@ -1,0 +1,115 @@
+@import url('/site/templates/styles/tokens.css');
+
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline__connector {
+  position: absolute;
+  left: calc((var(--space-8) / 2) - 1px);
+  top: calc(var(--space-8) / 2);
+  bottom: calc(var(--space-8) / 2);
+  width: 2px;
+  background-color: var(--color-border);
+}
+
+.timeline__item {
+  --timeline-accent: var(--color-slate-text);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  min-height: var(--space-8);
+  padding: 0 0 var(--space-3) calc(var(--space-8) + var(--space-4));
+  color: inherit;
+  text-decoration: none;
+}
+
+.timeline__item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline__node {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-full);
+  background-color: var(--timeline-accent);
+}
+
+.timeline__content {
+  position: relative;
+  display: block;
+  min-width: 0;
+  width: 100%;
+  min-height: var(--space-8);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+  font-size: var(--type-body-medium-size);
+  font-weight: var(--type-body-medium-weight);
+  line-height: var(--type-body-medium-lh);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.timeline__meta {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--color-text-secondary);
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-lh);
+}
+
+a.timeline__item .timeline__content {
+  padding-right: var(--space-8);
+}
+
+a.timeline__item .timeline__content::after {
+  content: '>';
+  position: absolute;
+  top: 50%;
+  right: var(--space-4);
+  transform: translateY(-50%);
+  color: var(--color-text-meta);
+  font-size: var(--font-size-16);
+  line-height: 1;
+}
+
+a.timeline__item:hover .timeline__content {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.timeline__item[data-timeline-type='admission'] {
+  --timeline-accent: var(--color-brand);
+}
+
+.timeline__item[data-timeline-type='diagnosis'] {
+  --timeline-accent: var(--color-purple-text);
+}
+
+.timeline__item[data-timeline-type='procedure'] {
+  --timeline-accent: var(--color-orange-text);
+}
+
+.timeline__item[data-timeline-type='operation-note'] {
+  --timeline-accent: var(--color-teal-text);
+}
+
+.timeline__item[data-timeline-type='hospital-course'] {
+  --timeline-accent: var(--color-slate-text);
+}
+
+.timeline__item[data-timeline-type='discharge'] {
+  --timeline-accent: var(--color-success-text);
+}

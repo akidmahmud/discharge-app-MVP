@@ -1,0 +1,258 @@
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: var(--space-btn-height);
+  padding: 0 var(--space-btn-padding-x-wide);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-13);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  outline: none;
+  -webkit-user-select: none;
+  user-select: none;
+  position: relative;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.btn--sm {
+  height: var(--space-btn-sm-height);
+  padding: 0 var(--space-btn-padding-x);
+}
+
+.btn--full {
+  width: 100%;
+}
+
+.btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size-xs);
+  height: var(--icon-size-xs);
+  flex-shrink: 0;
+}
+
+.btn__icon svg,
+.btn__icon [data-lucide] {
+  width: 14px;
+  height: 14px;
+  stroke-width: var(--icon-stroke);
+}
+
+.btn--primary {
+  background-color: var(--color-brand-500);
+  color: var(--color-white);
+}
+
+.btn--primary:hover:not(:disabled):not(.is-loading) {
+  background-color: var(--color-brand-600);
+}
+
+.btn--primary:active:not(:disabled):not(.is-loading) {
+  background-color: var(--color-brand-700);
+}
+
+.btn--secondary,
+.btn--neutral {
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text-body);
+  border-color: var(--color-border);
+}
+
+.btn--secondary:hover:not(:disabled):not(.is-loading),
+.btn--neutral:hover:not(:disabled):not(.is-loading) {
+  background-color: var(--color-bg-subtle);
+  border-color: var(--color-border-hover);
+}
+
+.btn--secondary:active:not(:disabled):not(.is-loading),
+.btn--neutral:active:not(:disabled):not(.is-loading) {
+  background-color: #EEF4FF;
+  border-color: var(--color-border-hover);
+}
+
+.btn--destructive {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger-text);
+  border-color: transparent;
+}
+
+.btn--destructive:hover:not(:disabled):not(.is-loading) {
+  background-color: #FECACA;
+  color: var(--color-danger-dark);
+}
+
+.btn--destructive:active:not(:disabled):not(.is-loading) {
+  background-color: #FECACA;
+  border-color: var(--color-danger-border);
+}
+
+.btn--back {
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text-body);
+  border-color: var(--color-border);
+}
+
+.btn--back:hover:not(:disabled):not(.is-loading) {
+  background-color: var(--color-bg-subtle);
+  border-color: var(--color-border-hover);
+}
+
+.btn--icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border-color: transparent;
+  border-radius: var(--radius-sm);
+}
+
+.btn--icon:hover:not(:disabled) {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-body);
+}
+
+.btn--icon:active:not(:disabled) {
+  background-color: #EEF4FF;
+}
+
+.btn--icon svg,
+.btn--icon [data-lucide] {
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
+  stroke-width: var(--icon-stroke);
+}
+
+.btn-diagnosis {
+  background-color: #4F46E5;
+  color: var(--color-white);
+}
+
+.btn-diagnosis:hover:not(:disabled):not(.is-loading) {
+  background-color: #4338CA;
+}
+
+.btn-diagnosis:active:not(:disabled):not(.is-loading) {
+  background-color: #3730A3;
+}
+
+.btn-surgery {
+  background-color: #DC2626;
+  color: var(--color-white);
+}
+
+.btn-surgery:hover:not(:disabled):not(.is-loading) {
+  background-color: #B91C1C;
+}
+
+.btn-surgery:active:not(:disabled):not(.is-loading) {
+  background-color: #991B1B;
+}
+
+.btn-medication {
+  background-color: #16A34A;
+  color: var(--color-white);
+}
+
+.btn-medication:hover:not(:disabled):not(.is-loading) {
+  background-color: #15803D;
+}
+
+.btn-medication:active:not(:disabled):not(.is-loading) {
+  background-color: #166534;
+}
+
+.btn-condition {
+  background-color: #059669;
+  color: var(--color-white);
+}
+
+.btn-condition:hover:not(:disabled):not(.is-loading) {
+  background-color: #047857;
+}
+
+.btn-condition:active:not(:disabled):not(.is-loading) {
+  background-color: #065F46;
+}
+
+.btn-discharge {
+  background-color: #CA8A04;
+  color: var(--color-white);
+}
+
+.btn-discharge:hover:not(:disabled):not(.is-loading) {
+  background-color: #A16207;
+}
+
+.btn-discharge:active:not(:disabled):not(.is-loading) {
+  background-color: #854D0E;
+}
+
+.btn:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.3);
+  outline-offset: 2px;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn.is-loading {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn.is-loading .btn__icon {
+  display: none;
+}
+
+.btn.is-loading::before {
+  content: '';
+  display: inline-block;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  animation: btn-spin 0.65s linear infinite;
+}
+
+.btn--primary.is-loading::before,
+.btn-diagnosis.is-loading::before,
+.btn-surgery.is-loading::before,
+.btn-medication.is-loading::before,
+.btn-condition.is-loading::before,
+.btn-discharge.is-loading::before {
+  border-color: rgba(255, 255, 255, 0.28);
+  border-top-color: currentColor;
+}
+
+.btn--secondary.is-loading::before,
+.btn--neutral.is-loading::before,
+.btn--back.is-loading::before,
+.btn--icon.is-loading::before,
+.btn--destructive.is-loading::before {
+  border-color: rgba(37, 99, 235, 0.2);
+  border-top-color: currentColor;
+}

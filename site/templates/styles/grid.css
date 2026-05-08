@@ -1,0 +1,161 @@
+/* ==============================================================
+   CLINICAL DISCHARGE & SURGICAL REGISTRY SYSTEM
+   grid.css — Module 2: 12-Column Grid System
+   Spec: Part 3.3 (12-col, 16px gutter, 8px base unit),
+         Part 3.4 (panel span aliases).
+   Desktop-only, no responsive breakpoints (spec 2.1 / 2.2).
+   ============================================================== */
+
+
+/* ==============================================================
+   1. GRID CONTAINER
+   12-column CSS Grid, 16px column gutter.
+   Spec 3.3: 12-column, gutter 16px.
+   ============================================================== */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-4); /* 16px — spec gutter */
+  align-items: start;
+}
+
+/* Gutter-only variants for special layouts */
+.grid--gap-0  { gap: 0; }
+.grid--gap-2  { gap: var(--space-2);  } /* 8px  */
+.grid--gap-3  { gap: var(--space-3);  } /* 12px */
+.grid--gap-4  { gap: var(--space-4);  } /* 16px — default */
+.grid--gap-6  { gap: var(--space-6);  } /* 24px */
+
+/* Column-gap and row-gap independently */
+.grid--col-gap-4 { column-gap: var(--space-4); }
+.grid--row-gap-4 { row-gap: var(--space-4); }
+.grid--row-gap-3 { row-gap: var(--space-3); }
+.grid--row-gap-5 { row-gap: var(--space-5); }
+
+
+/* ==============================================================
+   2. COLUMN SPAN UTILITIES
+   .col-{n} — span n of 12 columns.
+   All values: 1 through 12.
+   ============================================================== */
+
+.col-1  { grid-column: span 1;  }
+.col-2  { grid-column: span 2;  }
+.col-3  { grid-column: span 3;  }
+.col-4  { grid-column: span 4;  }
+.col-5  { grid-column: span 5;  }
+.col-6  { grid-column: span 6;  }
+.col-7  { grid-column: span 7;  }
+.col-8  { grid-column: span 8;  }
+.col-9  { grid-column: span 9;  }
+.col-10 { grid-column: span 10; }
+.col-11 { grid-column: span 11; }
+.col-12 { grid-column: span 12; }
+
+
+/* ==============================================================
+   3. PANEL SPAN ALIASES
+   Spec 3.4 named panel types.
+   ============================================================== */
+
+/* Small card (stat) — 3 of 12 columns (25%) */
+.panel--stat {
+  grid-column: span 3;
+}
+
+/* Medium panel — 6 of 12 columns (50%) */
+.panel--half {
+  grid-column: span 6;
+}
+
+/* Full-width section — 12 of 12 columns (100%) */
+.panel--full {
+  grid-column: span 12;
+}
+
+
+/* ==============================================================
+   4. COLUMN PLACEMENT (START POSITION)
+   .col-start-{n} — begin at column line n.
+   Useful for offset layouts.
+   ============================================================== */
+
+.col-start-1  { grid-column-start: 1;  }
+.col-start-2  { grid-column-start: 2;  }
+.col-start-3  { grid-column-start: 3;  }
+.col-start-4  { grid-column-start: 4;  }
+.col-start-5  { grid-column-start: 5;  }
+.col-start-6  { grid-column-start: 6;  }
+.col-start-7  { grid-column-start: 7;  }
+.col-start-8  { grid-column-start: 8;  }
+.col-start-9  { grid-column-start: 9;  }
+.col-start-10 { grid-column-start: 10; }
+
+
+/* ==============================================================
+   5. ROW SPAN UTILITIES
+   .row-{n} — span n grid rows.
+   Used for panels that must occupy multiple rows.
+   ============================================================== */
+
+.row-1 { grid-row: span 1; }
+.row-2 { grid-row: span 2; }
+.row-3 { grid-row: span 3; }
+
+
+/* ==============================================================
+   6. GRID ALIGNMENT
+   Vertical alignment of items and self within a grid row.
+   ============================================================== */
+
+.grid--align-start   { align-items: start;   }
+.grid--align-center  { align-items: center;  }
+.grid--align-end     { align-items: end;     }
+.grid--align-stretch { align-items: stretch; }
+
+.col--align-start    { align-self: start;   }
+.col--align-center   { align-self: center;  }
+.col--align-end      { align-self: end;     }
+.col--align-stretch  { align-self: stretch; }
+
+
+/* ==============================================================
+   7. NESTED GRID HELPERS
+   For panels that contain their own internal sub-grid.
+   Inherits the same 16px gutter unless overridden.
+   ============================================================== */
+
+.subgrid {
+  display: grid;
+  gap: var(--space-3); /* 12px for tighter internal layouts */
+}
+
+.subgrid--2col { grid-template-columns: 1fr 1fr; }
+.subgrid--3col { grid-template-columns: 1fr 1fr 1fr; }
+.subgrid--4col { grid-template-columns: repeat(4, 1fr); }
+
+
+/* ==============================================================
+   8. STAT CARD ROW
+   Convenience class for the dashboard 4-card stat row.
+   Spec 12.1: 4 stat cards, each 3 columns, gap 16px.
+   ============================================================== */
+
+.stat-card-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4); /* 16px */
+}
+
+
+/* ==============================================================
+   9. QUICK LINKS GRID
+   Spec 12.1: 2×2 grid, gap 12px.
+   ============================================================== */
+
+.quick-links-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3); /* 12px */
+}

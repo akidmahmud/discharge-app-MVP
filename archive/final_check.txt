@@ -1,0 +1,4 @@
+ID: 1019 | Title: Admission 2025015383
+Has ip_number field in template: YES
+Raw IP value: IP-20260419-1019
+Formatted IP value: IP-20260419-1019

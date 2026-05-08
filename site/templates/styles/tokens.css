@@ -1,0 +1,379 @@
+/* ==============================================================
+   CLINICAL DISCHARGE & SURGICAL REGISTRY SYSTEM
+   tokens.css — Module 1: Design Token System
+   Single source of truth for all CSS custom properties.
+   Spec: Part 4 (tokens), Part 3.2 (layout), Part 3.3 (spacing).
+   Version: 1.0 FINAL
+   ============================================================== */
+
+:root {
+
+  /* ============================================================
+     4.1  COLOR TOKENS
+     ============================================================ */
+
+  /* ── A. Core Neutrals ────────────────────────────────────────
+     White, page surface, elevated surface, tertiary surface.
+     ─────────────────────────────────────────────────────────── */
+  --color-white:             #FFFFFF;
+  --color-bg-page:           #E6F0FF;   /* full app background           */
+  --color-bg-elevated:       #FFFFFF;   /* cards, panels, inputs         */
+  --color-bg-subtle:         #F2F7FF;   /* secondary sections / nests    */
+  --color-bg-muted:          #F2F7FF;   /* form containers / soft tint   */
+
+  /* ── B. Border ───────────────────────────────────────────────
+     Default border and hover/focus border.
+     ─────────────────────────────────────────────────────────── */
+  --color-border:            #E2E8F0;   /* default dividers, card edges  */
+  --color-border-hover:      #BCD3F7;   /* hover ring on inputs / cards  */
+  --color-border-focus:      #2563EB;   /* focus border on inputs        */
+  --color-divider-soft:      #EDF2F7;   /* soft internal dividers        */
+
+  /* ── C. Text ─────────────────────────────────────────────────
+     Four-level text hierarchy.
+     ─────────────────────────────────────────────────────────── */
+  --color-text-primary:      #1E293B;   /* headings, strong labels       */
+  --color-text-body:         #1E293B;   /* default body copy             */
+  --color-text-secondary:    #6B7280;   /* labels, secondary copy        */
+  --color-text-placeholder:  #9CA3AF;   /* input placeholders            */
+  --color-text-meta:         #9CA3AF;   /* timestamps, footnotes         */
+  --color-text-disabled:     #9CA3AF;   /* disabled control text         */
+
+  /* ── D. Brand / Action ───────────────────────────────────────
+     Primary interactive color (#2563EB) and its ramp.
+     ─────────────────────────────────────────────────────────── */
+  --color-brand-50:          #E1EAFF;   /* lightest tint                 */
+  --color-brand-100:         #DBE9FF;   /* section header / sidebar bg   */
+  --color-brand-200:         #C7DDFF;   /* active workflow state         */
+  --color-brand-500:         #2563EB;   /* primary action — default      */
+  --color-brand-600:         #1D4ED8;   /* primary action — hover        */
+  --color-brand-700:         #1E40AF;   /* primary action — active/press */
+  --color-brand-300:         #3B82F6;   /* structural accent border      */
+
+  /* Semantic aliases (used by components) */
+  --color-brand:             var(--color-brand-500);
+  --color-brand-hover:       var(--color-brand-600);
+  --color-brand-active:      var(--color-brand-700);
+  --color-brand-light:       var(--color-brand-50);
+  --color-brand-border:      var(--color-brand-100);
+
+  /* ── E. Semantic — Success (green) ───────────────────────────
+     Patient Active, Procedure Completed, Discharge Finalized,
+     Discharged case header badge (solid), positive sub-stat.
+     ─────────────────────────────────────────────────────────── */
+  --color-success-text:      #22C55E;
+  --color-success-bg:        #DCFCE7;
+  --color-success-solid:     #22C55E;   /* solid fill case-header badge  */
+  --color-success-dark:      #166534;
+
+  /* ── F. Semantic — Warning (amber) ───────────────────────────
+     Discharge Draft status.
+     ─────────────────────────────────────────────────────────── */
+  --color-warning-text:      #F59E0B;
+  --color-warning-bg:        #FEF3C7;
+  --color-warning-border:    #F59E0B;
+  --color-warning-dark:      #92400E;
+
+  /* ── G. Semantic — Danger (red) ─────────────────────────────
+     Destructive actions, errors, form validation.
+     ─────────────────────────────────────────────────────────── */
+  --color-danger-text:       #DC2626;
+  --color-danger-bg:         #FEE2E2;
+  --color-danger-border:     #FECACA;
+  --color-danger-dark:       #991B1B;
+
+  /* ── H. Semantic — Orange ────────────────────────────────────
+     Procedure Complication, Pending case header badge (solid),
+     warning/actionable sub-stat, timeline Procedure node.
+     ─────────────────────────────────────────────────────────── */
+  --color-orange-text:       #F59E0B;
+  --color-orange-bg:         #FEF3C7;
+  --color-orange-solid:      #F59E0B;   /* pending / caution state       */
+
+  /* ── I. Semantic — Purple ────────────────────────────────────
+     Diagnosis timeline node, Surgeries stat card icon.
+     ─────────────────────────────────────────────────────────── */
+  --color-purple-text:       #2563EB;
+  --color-purple-bg:         #E1EAFF;
+
+  /* ── J. Semantic — Teal ──────────────────────────────────────
+     Discharge Ready status, Operation Note timeline node.
+     ─────────────────────────────────────────────────────────── */
+  --color-teal-text:         #0EA5E9;
+  --color-teal-bg:           #E0F2FE;
+
+  /* ── K. Semantic — Slate (gray) ─────────────────────────────
+     Patient Discharged badge, Hospital Course node, neutral
+     comparative sub-stat, archive icon.
+     ─────────────────────────────────────────────────────────── */
+  --color-slate-text:        #9CA3AF;
+  --color-slate-bg:          #F2F7FF;
+
+  /* ── L. Skeleton ─────────────────────────────────────────────
+     Spec 8.11 — loading shimmer base and sweep highlight.
+     ─────────────────────────────────────────────────────────── */
+  --color-skeleton-base:     #E9EEF6;
+  --color-skeleton-shine:    #F4F7FC;
+
+  /* ── M. Interaction State Surfaces ───────────────────────────
+     Shared hover / active backgrounds used across nav, rows, etc.
+     ─────────────────────────────────────────────────────────── */
+  --color-surface-hover:     #F2F7FF;   /* table rows, dropdown items    */
+  --color-surface-hover-nav: #F2F7FF;   /* sidebar nav item hover        */
+  --color-surface-active:    #C7DDFF;   /* sidebar nav item active       */
+
+
+  /* ============================================================
+     4.2  TYPOGRAPHY TOKENS
+     Spec: exact values from type scale table (Part 4.2).
+     ============================================================ */
+
+  /* ── Font Family ─────────────────────────────────────────── */
+  --font-family-base:    'Inter', -apple-system, BlinkMacSystemFont,
+                         'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-family-print:   Arial, Helvetica, sans-serif; /* spec 14.4 fallback */
+
+  /* ── Font Sizes ──────────────────────────────────────────── */
+  --font-size-10:        10px;   /* micro heading                        */
+  --font-size-11:        11px;   /* badge, timeline label                */
+  --font-size-12:        12px;   /* meta, breadcrumb, table header       */
+  --font-size-13:        13px;   /* card label, small body, nav items    */
+  --font-size-14:        14px;   /* body, body-medium                    */
+  --font-size-15:        15px;   /* subsection heading                   */
+  --font-size-16:        16px;   /* section heading                      */
+  --font-size-18:        18px;   /* case header patient name             */
+  --font-size-22:        22px;   /* page heading                         */
+
+  /* ── Font Weights ────────────────────────────────────────── */
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* ── Line Heights ────────────────────────────────────────── */
+  --line-height-14:      14px;   /* badge, timeline label, micro heading */
+  --line-height-16:      16px;   /* meta, table header                   */
+  --line-height-18:      18px;   /* card label                           */
+  --line-height-20:      20px;   /* body, body-medium, nav text          */
+  --line-height-22:      22px;   /* subsection heading                   */
+  --line-height-24:      24px;   /* section heading                      */
+  --line-height-30:      30px;   /* page heading                         */
+
+  /* ── Letter Spacing ──────────────────────────────────────── */
+  --letter-spacing-tight:   0;
+  --letter-spacing-label:   0.8px;   /* timeline labels, section labels  */
+  --letter-spacing-micro:   1px;     /* micro headings, QUICK ACTIONS    */
+
+  /* ── Semantic Type Token Bundles ─────────────────────────────
+     Each bundle names the SIZE / WEIGHT / LINE-HEIGHT triplet
+     to be applied together. Colors are set by context, not token.
+     ─────────────────────────────────────────────────────────── */
+  --type-page-heading-size:       var(--font-size-22);
+  --type-page-heading-weight:     var(--font-weight-bold);
+  --type-page-heading-lh:         var(--line-height-30);
+
+  --type-section-heading-size:    var(--font-size-16);
+  --type-section-heading-weight:  var(--font-weight-semibold);
+  --type-section-heading-lh:      var(--line-height-24);
+
+  --type-subsection-heading-size:    var(--font-size-15);
+  --type-subsection-heading-weight:  var(--font-weight-semibold);
+  --type-subsection-heading-lh:      var(--line-height-22);
+
+  --type-body-size:         var(--font-size-14);
+  --type-body-weight:       var(--font-weight-regular);
+  --type-body-lh:           var(--line-height-20);
+
+  --type-body-medium-size:   var(--font-size-14);
+  --type-body-medium-weight: var(--font-weight-medium);
+  --type-body-medium-lh:     var(--line-height-20);
+
+  --type-card-label-size:    var(--font-size-13);
+  --type-card-label-weight:  var(--font-weight-medium);
+  --type-card-label-lh:      var(--line-height-18);
+
+  --type-meta-size:         var(--font-size-12);
+  --type-meta-weight:       var(--font-weight-regular);
+  --type-meta-lh:           var(--line-height-16);
+
+  --type-meta-medium-size:   var(--font-size-12);
+  --type-meta-medium-weight: var(--font-weight-medium);
+  --type-meta-medium-lh:     var(--line-height-16);
+
+  --type-badge-size:         var(--font-size-11);
+  --type-badge-weight:       var(--font-weight-semibold);
+  --type-badge-lh:           var(--line-height-14);
+
+  --type-timeline-label-size:    var(--font-size-11);
+  --type-timeline-label-weight:  var(--font-weight-bold);
+  --type-timeline-label-lh:      var(--line-height-14);
+  --type-timeline-label-ls:      var(--letter-spacing-label);
+
+  --type-table-header-size:   var(--font-size-12);
+  --type-table-header-weight: var(--font-weight-semibold);
+  --type-table-header-lh:     var(--line-height-16);
+
+  --type-micro-heading-size:    var(--font-size-10);
+  --type-micro-heading-weight:  var(--font-weight-bold);
+  --type-micro-heading-lh:      var(--line-height-14);
+  --type-micro-heading-ls:      var(--letter-spacing-micro);
+
+
+  /* ============================================================
+     SPACING TOKENS
+     Spec 3.3 — base unit 8px, multiples of 4 (preferably 8).
+     Naming: --space-{n} where value = n × 4px.
+     ============================================================ */
+
+  --space-0:    0px;
+  --space-1:    4px;    /*  1×4  — tight gaps, icon margin   */
+  --space-2:    8px;    /*  2×4  — base unit, small gaps     */
+  --space-3:    12px;   /*  3×4  — button padding, small gap */
+  --space-4:    16px;   /*  4×4  — card padding, nav gaps    */
+  --space-5:    20px;   /*  5×4  — content top padding       */
+  --space-6:    24px;   /*  6×4  — content side padding      */
+  --space-7:    28px;   /*  7×4  — (reserved)                */
+  --space-8:    32px;   /*  8×4  — icon hit areas, headings  */
+  --space-9:    36px;   /*  9×4  — default button height     */
+  --space-10:   40px;   /* 10×4  — input height, nav item    */
+  --space-12:   48px;   /* 12×4  — case header avatar        */
+  --space-14:   56px;   /* 14×4  — recent admission row      */
+  --space-16:   64px;   /* 16×4  — topbar height             */
+  --space-20:   80px;   /* 20×4  — textarea min-height       */
+  --space-24:   96px;   /* 24×4  — (reserved)                */
+  --space-30:   120px;  /* 30×4  — stat card height approx   */
+
+  /* ── Component-Specific Spacing Tokens ───────────────────────
+     Named for their role, resolved to base scale.
+     ─────────────────────────────────────────────────────────── */
+  --space-btn-sm-height:      34px;    /* small button — spec 8.2       */
+  --space-btn-height:         36px;    /* default button — spec 8.2     */
+  --space-btn-padding-x:      var(--space-3);   /* 12px               */
+  --space-btn-padding-x-wide: 14px;             /* spec 8.2: 0 14px   */
+  --space-input-height:       36px;    /* text / select / date          */
+  --space-textarea-min:       80px;    /* spec 8.3                      */
+  --space-nav-item-height:    40px;    /* spec 6.2                      */
+  --space-topbar-height:      var(--space-16);  /* 64px                */
+  --space-sidebar-width:      240px;   /* spec 3.2                      */
+
+
+  /* ============================================================
+     4.3  BORDER RADIUS TOKENS
+     ============================================================ */
+
+  --radius-none: 0;
+  --radius-sm:   4px;     /* icon-button hover circle, subtle rounding  */
+  --radius-md:   6px;     /* buttons, inputs, nav items, badges(partial) */
+  --radius-lg:   8px;     /* cards, dropdowns, popovers, date picker     */
+  --radius-xl:   12px;    /* (reserved for larger overlays if needed)    */
+  --radius-full: 9999px;  /* badges, avatar circles, pills               */
+
+
+  /* ============================================================
+     4.4  SHADOW TOKENS
+     ============================================================ */
+
+  --shadow-none: none;
+  --shadow-sm:   0 1px 3px rgba(0, 0, 0, 0.06);   /* subtle lift         */
+  --shadow-md:   0 4px 12px rgba(0, 0, 0, 0.08);  /* hover / active      */
+  --shadow-lg:   0 12px 28px rgba(0, 0, 0, 0.14); /* modal / overlay     */
+
+
+  /* ============================================================
+     4.5  Z-INDEX TOKENS
+     ============================================================ */
+
+  --z-content:     1;    /* page content, below fixed elements             */
+  --z-breadcrumb:  1;    /* breadcrumb strip (same plane as content)       */
+  --z-topbar:     20;    /* fixed top bar                                  */
+  --z-sidebar:    20;    /* fixed sidebar (same plane as topbar)           */
+  --z-dropdown:   30;    /* all dropdown menus and action menus            */
+  --z-datepicker: 35;    /* date picker popover (above dropdowns)          */
+  --z-modal:      40;    /* modals and overlays (future use)               */
+  --z-toast:      50;    /* toast notifications (topmost)                  */
+
+
+  /* ============================================================
+     4.6  TRANSITION TOKENS
+     Spec 4.6 usage rules applied.
+     ============================================================ */
+
+  --transition-fast:     80ms ease;       /* hover bg, focus ring, chevron */
+  --transition-default:  120ms ease-out;  /* dropdown open, chevron rotate */
+
+  /* Named aliases for intent clarity */
+  --transition-hover:    var(--transition-fast);
+  --transition-focus:    var(--transition-fast);
+  --transition-dropdown: var(--transition-default);
+
+
+  /* ============================================================
+     LAYOUT DIMENSION TOKENS
+     Spec Part 3.2 — exact values.
+     ============================================================ */
+
+  --layout-sidebar-width:          240px;
+  --layout-topbar-height:          64px;
+  --layout-breadcrumb-height:      32px;
+  --layout-content-max-width:      1280px;
+  --layout-content-padding-x:      24px;
+  --layout-content-padding-top:    20px;
+  --layout-content-padding-bottom: 24px;
+
+  /* Legacy aliases kept for Module 0 layout classes */
+  --sidebar-width:          var(--layout-sidebar-width);
+  --topbar-height:          var(--layout-topbar-height);
+  --breadcrumb-height:      var(--layout-breadcrumb-height);
+  --content-max-width:      var(--layout-content-max-width);
+  --content-padding-x:      var(--layout-content-padding-x);
+  --content-padding-top:    var(--layout-content-padding-top);
+  --content-padding-bottom: var(--layout-content-padding-bottom);
+
+
+  /* ============================================================
+     ICON TOKENS
+     Spec Part 5.3 — single stroke weight, never mix.
+     ============================================================ */
+
+  --icon-stroke:        1.75;    /* Lucide stroke-width attribute value   */
+  --icon-size-xs:       14px;    /* small action / input                  */
+  --icon-size-sm:       16px;    /* default inline, nav, table            */
+  --icon-size-md:       18px;    /* nav / table / action                  */
+  --icon-size-lg:       20px;    /* header utility, bell icon             */
+  --icon-size-xl:       22px;    /* case header avatar                    */
+  --icon-size-stat:     18px;    /* icon inside 36×36 stat card container */
+  --icon-size-ql:       16px;    /* icon inside 32×32 quick-link container*/
+  --icon-size-timeline: 16px;    /* icon inside 32×32 timeline node       */
+
+  /* ── Focus Ring ─────────────────────────────────────────────
+     Spec Part 9.5 — applied globally in main.css.
+     ─────────────────────────────────────────────────────────── */
+  --focus-ring-width:  3px;
+  --focus-ring-color:  rgba(37, 99, 235, 0.5);
+  --focus-ring-offset: 2px;
+
+  /* ── Legacy flat aliases — kept for backward compat ──────────
+     Module 0 used --color-brand / --color-text-heading etc.
+     These resolve to the structured tokens above.
+     ─────────────────────────────────────────────────────────── */
+  --color-text-heading:   var(--color-text-primary);
+  --color-brand:          var(--color-brand-500);
+  --color-brand-hover:    var(--color-brand-600);
+  --color-brand-active:   var(--color-brand-700);
+  --color-brand-light:    var(--color-brand-50);
+  --color-brand-border:   var(--color-brand-100);
+  --color-success:        var(--color-success-text);
+  --color-warning:        var(--color-warning-text);
+  --color-danger:         var(--color-danger-text);
+  --color-orange:         var(--color-orange-text);
+  --color-purple:         var(--color-purple-text);
+  --color-teal:           var(--color-teal-text);
+  --color-slate:          var(--color-slate-text);
+  --color-bg-primary:     var(--color-bg-elevated);
+  --color-bg-secondary:   var(--color-bg-page);
+  --color-bg-tertiary:    var(--color-bg-subtle);
+  --color-hover-bg:       var(--color-surface-hover);
+  --color-hover-nav:      var(--color-surface-hover-nav);
+  --color-active-bg:      var(--color-surface-active);
+  --font-family:          var(--font-family-base);
+}

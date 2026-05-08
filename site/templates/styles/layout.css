@@ -1,0 +1,863 @@
+/* ==============================================================
+   CLINICAL DISCHARGE & SURGICAL REGISTRY SYSTEM
+   layout.css — Module 2: Global Layout System
+   Spec: Part 3 (layout model + dimensions), Part 6 (shell zones),
+         Part 7 (breadcrumb strip), Part 14 (print chrome removal).
+   ============================================================== */
+
+
+/* ==============================================================
+   1. APP SHELL — OUTER STRUCTURE
+   Three fixed regions: sidebar (left), topbar (top), main (body).
+   Spec 3.1, 3.2, 4.5 (z-index), 6.1, 6.2.
+   ============================================================== */
+
+/* ── 1a. Sidebar ─────────────────────────────────────────────
+   Fixed to the left edge for the full viewport height.
+   240px wide. Sits at z-index 20.
+   Spec 6.2: overflow hidden — no internal scroll in v1.
+   ─────────────────────────────────────────────────────────── */
+.app-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--layout-sidebar-width);        /* 240px */
+  height: 100vh;
+  background-color: var(--color-brand-100);
+  border-right: 1px solid var(--color-border);
+  z-index: var(--z-sidebar);                 /* 20 */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-sidebar.sidebar--collapsed {
+  width: 0;
+  border-right: 0;
+}
+
+.app-sidebar.app-sidebar--collapsed {
+  width: var(--sidebar-collapsed-width, 60px);
+}
+
+.app-sidebar.app-sidebar--collapsed .app-brand__name,
+.app-sidebar.app-sidebar--collapsed .app-brand__subtitle,
+.app-sidebar.app-sidebar--collapsed .sidebar-quick-actions__label,
+.app-sidebar.app-sidebar--collapsed .nav-item span,
+.app-sidebar.app-sidebar--collapsed .sidebar-quick-actions .btn span {
+  display: none;
+}
+
+.app-sidebar.app-sidebar--collapsed .sidebar-quick-actions {
+  padding-inline: 12px;
+}
+
+.app-sidebar.app-sidebar--collapsed .nav-item,
+.app-sidebar.app-sidebar--collapsed .sidebar-quick-actions .btn {
+  justify-content: center;
+}
+
+.app-sidebar__inner {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+/* ── 1b. Top Bar ─────────────────────────────────────────────
+   Fixed below the viewport top. Starts at the right edge of
+   the sidebar. 64px tall. Sits at z-index 20.
+   Spec 6.1: 3-zone flex row, padding 0 24px.
+   ─────────────────────────────────────────────────────────── */
+.app-topbar {
+  position: fixed;
+  top: 0;
+  left: var(--layout-sidebar-width);         /* 240px */
+  right: 0;
+  height: var(--layout-topbar-height);       /* 64px */
+  background-color: var(--color-bg-elevated);
+  border-bottom: 1px solid var(--color-border);
+  z-index: var(--z-topbar);                  /* 20 */
+  padding: 0 var(--layout-content-padding-x); /* 0 24px */
+  display: flex;
+  align-items: center;
+}
+
+.app-topbar.app-topbar--sidebar-collapsed {
+  left: 0;
+}
+
+.app-sidebar.app-sidebar--collapsed ~ .app-topbar.app-topbar--sidebar-collapsed {
+  left: var(--sidebar-collapsed-width, 60px);
+}
+
+/* ── 1c. Main Region ─────────────────────────────────────────
+   Occupies all space to the right of the sidebar and below
+   the topbar. Provides the scrollable page body.
+   ─────────────────────────────────────────────────────────── */
+.app-main {
+  margin-left: var(--layout-sidebar-width);  /* 240px */
+  padding-top: var(--layout-topbar-height);  /* 64px */
+  min-height: 100vh;
+  background-color: var(--color-bg-page);
+  position: relative;
+}
+
+.app-main.app-main--sidebar-collapsed {
+  margin-left: 0;
+}
+
+.app-sidebar.app-sidebar--collapsed ~ .app-topbar ~ .app-main.app-main--sidebar-collapsed {
+  margin-left: var(--sidebar-collapsed-width, 60px);
+}
+
+
+/* ==============================================================
+   2. SIDEBAR — INTERNAL STRUCTURAL ZONES
+   Spec 6.2: header / nav / quick-actions stacked vertically.
+   No internal scroll in v1 (overflow hidden on parent).
+   ============================================================== */
+
+/* ── 2a. Sidebar Header ──────────────────────────────────────
+   Doctor name block. flex-shrink 0 — never compresses.
+   Spec 6.2: padding 20px 16px.
+   ─────────────────────────────────────────────────────────── */
+.sidebar-header {
+  flex-shrink: 0;
+  padding: 20px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.app-brand__name {
+  font-size: var(--font-size-18);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-24);
+  color: var(--color-brand-500);
+}
+
+.app-brand__subtitle {
+  margin-top: var(--space-1);
+  font-size: var(--font-size-13);
+  line-height: var(--line-height-18);
+  color: var(--color-text-secondary);
+}
+
+/* ── 2b. Sidebar Navigation ──────────────────────────────────
+   Fills remaining vertical space between header and footer.
+   Spec 6.2: nav items, 40px height each, padding 0 16px.
+   ─────────────────────────────────────────────────────────── */
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 12px 0;
+  overflow: hidden; /* v1: no scroll */
+}
+
+.sidebar-nav__group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 6px;
+  color: var(--color-text-secondary);
+  background-color: transparent;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.sidebar-nav__count {
+  margin-left: auto;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--color-danger-text);
+  color: var(--color-white);
+  font-size: var(--font-size-10);
+  line-height: 18px;
+  text-align: center;
+}
+
+.nav-item:hover {
+  background-color: var(--color-surface-hover-nav);
+  color: var(--color-text-primary);
+}
+
+.nav-item--active {
+  background-color: var(--color-brand-200);
+  color: var(--color-brand-700);
+}
+
+.nav-item [data-lucide] {
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
+  stroke-width: var(--icon-stroke);
+}
+
+/* ── 2c. Sidebar Quick Actions ───────────────────────────────
+   QUICK ACTIONS label + Add Patient + New Admission buttons.
+   Sits at the bottom of the sidebar. flex-shrink 0.
+   Spec 6.2: label margin-top 16px margin-bottom 8px,
+             buttons gap 8px, full-width within 240px.
+   ─────────────────────────────────────────────────────────── */
+.sidebar-quick-actions {
+  flex-shrink: 0;
+  padding: 0 8px 16px;
+  border-top: 1px solid var(--color-divider-soft);
+}
+
+/* QUICK ACTIONS section label */
+.sidebar-quick-actions__label {
+  padding: 0 8px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-size: var(--font-size-10);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-14);
+  letter-spacing: var(--letter-spacing-micro); /* 1px */
+  text-transform: uppercase;
+  color: var(--color-text-meta);
+  display: block;
+}
+
+/* QUICK ACTIONS buttons wrapper — stacks vertically, gap 8px */
+.sidebar-quick-actions__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2); /* 8px */
+}
+
+
+/* ==============================================================
+   3. TOP BAR — INTERNAL 3-ZONE LAYOUT
+   Spec 6.1: left (doctor identity) | center (search 480px)
+             | right (utility controls).
+   Uses flex with flex:1 on outer zones and fixed width center.
+   ============================================================== */
+
+/* ── 3a. Left Zone — Doctor Identity ────────────────────────
+   Dashboard: two-line doctor name.
+   Internal pages: hamburger icon + name.
+   Spec 6.1: flex-shrink 0, aligned left.
+   ─────────────────────────────────────────────────────────── */
+.topbar-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3); /* 12px — hamburger-to-name gap */
+  min-width: 0; /* allow text truncation if needed */
+}
+
+/* ── 3b. Center Zone — Search Bar ───────────────────────────
+   480px fixed width. Spec 6.1: width 480px, height 40px.
+   flex-shrink 0 prevents compression.
+   ─────────────────────────────────────────────────────────── */
+.topbar-center {
+  flex: 0 0 480px;
+  width: 480px;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar__select {
+  height: 40px;
+  padding: 0 34px 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg-elevated);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-13);
+  line-height: var(--line-height-18);
+  appearance: none;
+  -webkit-appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #94A3B8 50%),
+    linear-gradient(135deg, #94A3B8 50%, transparent 50%);
+  background-position:
+    calc(100% - 15px) 17px,
+    calc(100% - 10px) 17px;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.search-bar__select:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.18);
+}
+
+/* ── 3c. Right Zone — Utility Controls ──────────────────────
+   Bell icon, MO badge, label, chevron — left to right.
+   Spec 6.1: gap implicitly 8–12px between controls.
+   ─────────────────────────────────────────────────────────── */
+.topbar-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3); /* 12px */
+  min-width: 0;
+}
+
+/* MO badge + label + chevron group — triggers dropdown */
+.topbar-mo-group {
+  position: relative; /* dropdown anchors to this */
+  display: flex;
+  align-items: center;
+  gap: var(--space-1); /* 4px between badge / label / chevron */
+  cursor: pointer;
+}
+
+.topbar-shell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--space-4);
+}
+
+.topbar-user-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar-user-meta__name {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-20);
+  color: var(--color-text-primary);
+}
+
+.topbar-user-meta__subtitle {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-16);
+  color: var(--color-text-secondary);
+}
+
+.topbar-role-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-muted);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-16);
+  color: var(--color-text-body);
+}
+
+.topbar-role-chip [data-lucide] {
+  width: var(--icon-size-xs);
+  height: var(--icon-size-xs);
+  stroke-width: var(--icon-stroke);
+}
+
+.topbar-role-chip__role {
+  color: var(--color-success-text);
+  font-size: var(--font-size-11);
+}
+
+
+/* ==============================================================
+   4. CONTENT REGIONS — SPEC PART 3.5 + PART 7
+   Order (top to bottom inside .app-main):
+     breadcrumb strip (optional, 32px)
+     app-content (padding 20px 24px 24px)
+       app-container (max-width 1280px)
+         #content (markup region — page templates inject here)
+   ============================================================== */
+
+/* ── 4a. Breadcrumb Wrap ─────────────────────────────────────
+   Outer slot. Empty by default; template files that need
+   breadcrumbs replace #breadcrumb with .app-breadcrumb-strip.
+   No styling here — just a zero-height placeholder.
+   ─────────────────────────────────────────────────────────── */
+.app-breadcrumb-wrap {
+  /* intentionally empty — height comes from child .app-breadcrumb-strip */
+}
+
+/* ── 4b. Breadcrumb Strip ────────────────────────────────────
+   Rendered by templates on pages 2+ levels deep.
+   NOT shown on Dashboard or Patient List.
+   Spec Part 7: height 32px, padding 0 24px, bg transparent.
+   ─────────────────────────────────────────────────────────── */
+.app-breadcrumb-strip {
+  height: var(--layout-breadcrumb-height);    /* 32px */
+  padding: 0 var(--layout-content-padding-x); /* 0 24px */
+  display: flex;
+  align-items: center;
+  background: transparent;
+  z-index: var(--z-breadcrumb);               /* 1 */
+}
+
+/* ── 4c. Content Padding Wrapper ────────────────────────────
+   Provides spec-exact padding around the bounded container.
+   Spec 3.2: 24px horizontal, 20px top, 24px bottom.
+   ─────────────────────────────────────────────────────────── */
+.app-content {
+  padding: var(--layout-content-padding-top)    /* 20px */
+           var(--layout-content-padding-x)       /* 24px */
+           var(--layout-content-padding-bottom); /* 24px */
+}
+
+/* ── 4d. Bounded Max-Width Container ────────────────────────
+   Hard-caps content width at 1280px per spec 3.2.
+   Left-aligned; the 24px side padding in .app-content acts
+   as the offset from the sidebar edge.
+   ─────────────────────────────────────────────────────────── */
+.app-container {
+  width: 100%;
+  max-width: var(--layout-content-max-width); /* 1280px */
+}
+
+.app-main--sidebar-collapsed .app-container {
+  max-width: none;
+}
+
+
+/* ==============================================================
+   5. PAGE STRUCTURE ZONES
+   Semantic regions within #content used by every page template.
+   Spec 3.5: page heading region | core content | optional footer.
+   ============================================================== */
+
+/* ── 5a. Page Header Zone ────────────────────────────────────
+   Contains page title block (left) and primary action (right).
+   Spec 12.x page specs: title area flex-row, justify-between.
+   Margin-bottom 20px before the content body.
+   ─────────────────────────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-5); /* 20px */
+}
+
+/* Title block: stacks heading and subtitle vertically */
+.page-header__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1); /* 4px between title and subtitle */
+}
+
+/* Action area: button(s) aligned to the right */
+.page-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2); /* 8px between multiple action buttons */
+  flex-shrink: 0;
+  padding-top: 2px; /* optical alignment to heading baseline */
+}
+
+/* ── 5b. Core Content Zone ───────────────────────────────────
+   The main body area beneath the page header.
+   No extra padding — inherits from .app-content.
+   ─────────────────────────────────────────────────────────── */
+.page-body {
+  /* intentionally bare — child components define their own spacing */
+}
+
+/* ── 5c. Page Footer Zone (Dashboard only) ───────────────────
+   Spec 6.3: flex row, justify-between, border-top, pt-12, mt-24.
+   Only used on dashboard. All other pages omit this element.
+   ─────────────────────────────────────────────────────────── */
+.page-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-3);  /* 12px */
+  margin-top: var(--space-6);   /* 24px */
+  font-size: var(--font-size-11);
+  font-weight: var(--font-weight-regular);
+  line-height: 14px;
+  color: var(--color-text-meta);
+}
+
+
+/* ==============================================================
+   6. SECTION LAYOUT HELPERS
+   Generic structural helpers for common page-level layout
+   patterns. Used by multiple page templates.
+   ============================================================== */
+
+/* ── 6a. Two-Column Layout ───────────────────────────────────
+   Used by: Procedure Details (2 equal cols, gap 24px).
+   Spec 12.4: 2-column layout, gap 24px.
+   ─────────────────────────────────────────────────────────── */
+.layout-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6); /* 24px */
+  align-items: start;
+}
+
+/* ── 6b. Three-Column Layout ─────────────────────────────────
+   Used by: Discharge Summary document body.
+   Spec 12.5: 3 equal columns, gap 20px, align top.
+   ─────────────────────────────────────────────────────────── */
+.layout-3col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-5); /* 20px */
+  align-items: start;
+}
+
+/* ── 6c. Four-Column Layout ──────────────────────────────────
+   Used by: Procedure Metadata Card (4 cells, gap 24px).
+   Spec 12.4: 4-column flex, gap 24px.
+   ─────────────────────────────────────────────────────────── */
+.layout-4col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6); /* 24px */
+  align-items: start;
+}
+
+/* ── 6d. Stack (vertical flex) ───────────────────────────────
+   Common vertical stack with configurable gap via modifier.
+   ─────────────────────────────────────────────────────────── */
+.layout-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-stack--gap-1 { gap: var(--space-1); } /*  4px */
+.layout-stack--gap-2 { gap: var(--space-2); } /*  8px */
+.layout-stack--gap-3 { gap: var(--space-3); } /* 12px */
+.layout-stack--gap-4 { gap: var(--space-4); } /* 16px */
+
+/* ── 6e. Inline Row (horizontal flex) ───────────────────────
+   Horizontal flex row with align-center and configurable gap.
+   ─────────────────────────────────────────────────────────── */
+.layout-row {
+  display: flex;
+  align-items: center;
+}
+
+.layout-row--gap-1 { gap: var(--space-1); } /*  4px */
+.layout-row--gap-2 { gap: var(--space-2); } /*  8px */
+.layout-row--gap-3 { gap: var(--space-3); } /* 12px */
+.layout-row--gap-4 { gap: var(--space-4); } /* 16px */
+.layout-row--gap-6 { gap: var(--space-6); } /* 24px */
+
+.layout-row--between {
+  justify-content: space-between;
+}
+
+.layout-row--end {
+  justify-content: flex-end;
+}
+
+/* ── 6f. Section Divider ──────────────────────────────────────
+   Horizontal rule used between form groups or content sections.
+   ─────────────────────────────────────────────────────────── */
+.layout-divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-border);
+  border: none;
+  margin: var(--space-3) 0; /* 12px top and bottom */
+}
+
+.layout-divider--tight {
+  margin: var(--space-2) 0; /* 8px */
+}
+
+/* ==============================================================
+   6g. Case Page Layout
+   Sticky left workflow rail + scrollable right workspace.
+   ============================================================== */
+
+.case-layout {
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+}
+
+.case-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  position: sticky;
+  top: calc(var(--layout-topbar-height) + 20px);
+  max-height: calc(100vh - 84px);
+  overflow-y: auto;
+  padding: 16px;
+  border-right: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: #F4F8FF;
+}
+
+.case-workspace {
+  flex: 1;
+  min-width: 0;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.case-page-header {
+  margin-bottom: var(--space-3);
+}
+
+.case-meta-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 12px 16px;
+  margin-bottom: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-muted);
+}
+
+.case-meta-strip__items {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  font-size: var(--font-size-13);
+  line-height: var(--line-height-18);
+  color: var(--color-text-body);
+}
+
+.case-meta-strip__items strong {
+  color: var(--color-text-primary);
+  margin-right: 4px;
+}
+
+.case-meta-strip__saved {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-16);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.case-snapshot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.case-snapshot__name {
+  font-size: var(--font-size-15);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-22);
+  color: var(--color-text-primary);
+}
+
+.case-snapshot__meta {
+  font-size: var(--font-size-13);
+  line-height: var(--line-height-18);
+  color: var(--color-text-secondary);
+}
+
+.case-snapshot__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-13);
+  line-height: var(--line-height-18);
+  color: var(--color-text-body);
+}
+
+.case-snapshot__item [data-lucide] {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+  color: var(--color-text-meta);
+  stroke-width: var(--icon-stroke);
+}
+
+.case-snapshot__status {
+  padding-top: var(--space-1);
+}
+
+.case-progress__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.case-progress__item {
+  border-radius: var(--radius-md);
+}
+
+.case-progress__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border-left: 3px solid transparent;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.case-progress__item:hover .case-progress__link {
+  background: #EEF4FF;
+}
+
+.case-progress__item.is-active .case-progress__link {
+  background: #E0EDFF;
+  border-left-color: var(--color-brand-500);
+}
+
+.case-progress__number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-text-meta);
+  background: transparent;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.case-progress__item.is-complete .case-progress__number {
+  background: var(--color-success-text);
+  border-color: var(--color-success-text);
+}
+
+.case-progress__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+  min-width: 0;
+}
+
+.case-progress__title {
+  font-size: var(--font-size-13);
+  line-height: var(--line-height-18);
+  color: #475569;
+}
+
+.case-progress__item.is-active .case-progress__title {
+  color: var(--color-brand-500);
+}
+
+.case-progress__item.is-complete .case-progress__title {
+  color: var(--color-success-dark);
+}
+
+.case-progress__indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-subtle);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-11);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-14);
+  flex-shrink: 0;
+}
+
+.case-progress__item.is-complete .case-progress__indicator {
+  background: var(--color-success-bg);
+  color: var(--color-success-dark);
+}
+
+.case-progress__item.is-active .case-progress__indicator {
+  background: #E0EDFF;
+  color: var(--color-brand-700);
+}
+
+.case-progress__item.is-warning .case-progress__indicator {
+  background: var(--color-warning-bg);
+  color: var(--color-warning-dark);
+}
+
+.case-progress__item.is-active .case-progress__number {
+  background: var(--section-accent, var(--color-brand-500));
+  border-color: var(--section-accent, var(--color-brand-500));
+}
+
+.case-progress__item.is-warning .case-progress__number {
+  background: transparent;
+  border-color: var(--color-warning-text);
+}
+
+.case-module__title-group {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+
+/* ==============================================================
+   7. PRINT — HIDE LAYOUT CHROME
+   Spec Part 14.3: sidebar, topbar, action buttons, breadcrumb,
+   page heading zone, all interactive controls are hidden.
+   Only the document card content prints.
+   ============================================================== */
+
+@media print {
+
+  /* Hide all system chrome */
+  .app-sidebar,
+  .app-topbar,
+  .app-breadcrumb-wrap,
+  .app-breadcrumb-strip,
+  .page-header,
+  .page-footer,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Remove layout offsets */
+  .app-main {
+    margin-left: 0 !important;
+    padding-top: 0 !important;
+    background-color: #FFFFFF;
+  }
+
+  .app-content {
+    padding: 0 !important;
+  }
+
+  /* A4 margins — spec 14.2: 16mm on all sides */
+  @page {
+    size: A4 portrait;
+    margin: 16mm;
+  }
+
+  /* Page break rules — spec 14.5 */
+  .page-break-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Never orphan signature from its column — spec 14.5 */
+  .signature-block {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+
+  body {
+    background-color: #FFFFFF;
+    /* spec 14.4: fallback to Arial if Inter not embedded */
+    font-family: Arial, Helvetica, sans-serif;
+    color: #000000;
+  }
+}

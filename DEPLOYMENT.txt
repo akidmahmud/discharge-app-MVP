@@ -1,0 +1,275 @@
+================================================================================
+  DEPLOYMENT GUIDE — discharge-app → GitHub → Hostinger
+================================================================================
+Last updated: 2026-05-07
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — WHAT TO PUSH TO GITHUB (and what NOT to push)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PUSH everything EXCEPT the items below.
+
+Create a file named ".gitignore" in the project root with this content:
+--------------------------------------------------------------------------
+# ProcessWire runtime files — never commit these
+/site/assets/files/*
+!/site/assets/files/.htaccess
+
+/site/assets/logs/*
+!/site/assets/logs/.htaccess
+
+/site/assets/cache/*
+/site/assets/sessions/*
+/site/assets/backups/*
+
+# Database credentials — create this manually on the server
+/site/config.php
+
+# OS junk
+.DS_Store
+Thumbs.db
+--------------------------------------------------------------------------
+
+IMPORTANT NOTES:
+  • site/config.php is EXCLUDED from git because it contains your database
+    password. You will create it manually on Hostinger (see Section 3).
+  • site/assets/files/ holds uploaded images/PDFs for patients. These are
+    NOT in git. You copy them once via FTP (see Section 5).
+  • vendor/ IS included in git (Composer packages). This avoids needing to
+    run "composer install" on the server.
+  • wire/ (ProcessWire core), site/templates/, index.php, .htaccess — all
+    of these ARE pushed to GitHub.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — PUSH TO GITHUB
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1 — Create a new private repository on GitHub
+  • Go to https://github.com/new
+  • Name it (e.g. "discharge-app")
+  • Set it to PRIVATE (patient data — never public)
+  • Do NOT initialise with README or .gitignore (you already have files)
+
+Step 2 — Initialise git in the project folder and push
+  Open a terminal in H:\laragon\www\discharge-app\ and run:
+
+    git init
+    git add .
+    git commit -m "Initial commit"
+    git branch -M main
+    git remote add origin https://github.com/YOUR-USERNAME/discharge-app.git
+    git push -u origin main
+
+  Replace YOUR-USERNAME with your actual GitHub username.
+
+Step 3 — Verify
+  Go to your GitHub repo and confirm:
+  ✓ site/templates/ is present
+  ✓ vendor/ is present
+  ✓ wire/ is present
+  ✗ site/config.php is NOT listed (should be absent)
+  ✗ site/assets/files/ should be empty or absent
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — HOSTINGER SETUP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1 — Create MySQL database on Hostinger
+  1. Log in to hPanel (hpanel.hostinger.com)
+  2. Go to  Hosting → Databases → MySQL Databases
+  3. Create a new database — note down:
+       Database name:  e.g.  u123456789_discharge
+       Username:       e.g.  u123456789_discharge
+       Password:       (choose a strong password — SAVE THIS)
+       Host:           localhost   (always localhost on shared hosting)
+
+Step 2 — Connect GitHub repo via Hostinger Git
+  1. In hPanel go to  Advanced → Git
+  2. Click "Create" or "Connect"
+  3. Authorise GitHub when prompted
+  4. Select your "discharge-app" repository and branch "main"
+  5. Set the deployment path to:  public_html
+     (or a subdirectory like public_html/discharge if you want it in a folder)
+  6. Enable auto-deployment (so every git push triggers a pull on the server)
+  7. Click Deploy — Hostinger will clone the repo into public_html
+
+Step 3 — Create site/config.php on the server
+  This file was NOT pushed to GitHub. You must create it on the server.
+
+  Method A — Using Hostinger File Manager:
+    1. hPanel → Files → File Manager
+    2. Navigate to public_html/site/
+    3. Create a new file named "config.php"
+    4. Paste the content from the template at the bottom of this section
+
+  Method B — Using SSH (if your plan supports it):
+    ssh u123456789@yourdomain.com
+    nano ~/public_html/site/config.php
+    (paste the template below, save with Ctrl+X → Y → Enter)
+
+  ── config.php template ─────────────────────────────────────────────────────
+  <?php namespace ProcessWire;
+
+  if(!defined("PROCESSWIRE")) die();
+
+  $config->useFunctionsAPI    = true;
+  $config->usePageClasses     = true;
+  $config->useMarkupRegions   = true;
+  $config->prependTemplateFile = '_init.php';
+  $config->appendTemplateFile  = '_main.php';
+  $config->templateCompile    = false;
+
+  // ── Database ─────────────────────────────────────────────────────────────
+  $config->dbHost = 'localhost';
+  $config->dbName = 'u123456789_discharge';   // ← your DB name
+  $config->dbUser = 'u123456789_discharge';   // ← your DB username
+  $config->dbPass = 'YOUR_STRONG_PASSWORD';   // ← your DB password
+  $config->dbPort = '3306';
+  $config->dbEngine = 'InnoDB';
+
+  // ── Security ──────────────────────────────────────────────────────────────
+  $config->userAuthSalt = 'f828788aa92f264d90792d4cf53e462f943cef594ca1b12cca155d3d11e3a98e';
+  $config->httpHosts = array('yourdomain.com', 'www.yourdomain.com');
+
+  // ── Production mode ───────────────────────────────────────────────────────
+  $config->debug = false;
+  ────────────────────────────────────────────────────────────────────────────
+
+  Replace u123456789_discharge, YOUR_STRONG_PASSWORD, and yourdomain.com
+  with your actual values.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — DATABASE MIGRATION (local → Hostinger)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1 — Export your local database
+  Option A — phpMyAdmin (easiest):
+    1. Open  http://localhost/phpmyadmin  (or http://127.0.0.1:8080 in Laragon)
+    2. Select database "discharge_app" on the left
+    3. Click the  Export  tab
+    4. Format: SQL
+    5. Click Go — saves a .sql file to your computer
+
+  Option B — Command line:
+    mysqldump -u root discharge_app > discharge_app_backup.sql
+
+Step 2 — Import to Hostinger
+  1. hPanel → Databases → phpMyAdmin → click the database you created
+  2. Click the  Import  tab
+  3. Choose the .sql file you exported
+  4. Click Go
+
+  The import copies all tables, pages, templates, fields, and user accounts.
+  Your admin password remains the same as on your local machine.
+
+Step 3 — Verify
+  Visit your Hostinger domain. You should see the login page.
+  Log in with your existing admin credentials.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — UPLOADED FILES & IMAGES (patient documents, profile images)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Where files live:
+  All patient-uploaded files (images, documents, pre-op PDFs, etc.) are stored
+  in:   site/assets/files/
+
+  This folder is NOT in git (too large, patient data).
+  You must copy it to the server once via FTP, and keep it in sync manually.
+
+  On the server, these files live at:
+    ~/public_html/site/assets/files/
+
+Step 1 — Initial upload via FTP
+  1. Download FileZilla (free):  https://filezilla-project.org
+  2. In hPanel go to  Files → FTP Accounts — note your FTP credentials
+  3. In FileZilla connect with those credentials
+  4. Navigate to  /public_html/site/assets/
+  5. Upload your local  site/assets/files/  folder there
+     (this can take a while if there are many images)
+
+Step 2 — Ongoing file sync
+  Every time new files are uploaded in production they stay on the server.
+  If you need to sync back to local, use FTP to download the files/ folder.
+
+  For automatic sync you can use:
+    • Hostinger's built-in File Manager for small uploads
+    • rsync over SSH for bulk transfers (Business plan and above):
+        rsync -avz site/assets/files/ user@yourdomain.com:public_html/site/assets/files/
+
+Important folder permissions (set via FTP or File Manager):
+  site/assets/files/     → 755
+  site/assets/logs/      → 755
+  site/assets/cache/     → 755
+  site/assets/sessions/  → 755
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6 — FUTURE DEPLOYMENTS (after initial setup)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Once everything is set up, deploying code changes is just:
+
+  1. Edit files locally in Laragon
+  2. git add .
+     git commit -m "Description of change"
+     git push
+  3. Hostinger auto-pulls from GitHub (if auto-deploy is on)
+     — OR — go to hPanel → Git → click "Pull"
+
+That's it. Database and files are NOT affected by git push.
+
+If you add new database fields (e.g. run a migration script):
+  1. Run the migration on your local Laragon first
+  2. Export just the new table structure changes (or the full DB)
+  3. Import on Hostinger via phpMyAdmin
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7 — HOSTINGER PHP SETTINGS (check these)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+In hPanel → Advanced → PHP Configuration:
+
+  PHP version:         8.1 or 8.2  (ProcessWire requires PHP 7.1+)
+  memory_limit:        256M
+  upload_max_filesize: 32M          (for patient file uploads)
+  post_max_size:       32M
+  max_execution_time:  120          (for PDF generation)
+
+Also in hPanel → Advanced → .htaccess:
+  Make sure mod_rewrite is enabled (required by ProcessWire).
+  The .htaccess file in the project root handles this — it is included in git.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 8 — QUICK CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before going live:
+
+  [ ] .gitignore created (Section 1)
+  [ ] site/config.php is NOT in git (check GitHub — should not appear)
+  [ ] GitHub repo is PRIVATE
+  [ ] Hostinger MySQL database created (Section 3 Step 1)
+  [ ] GitHub repo connected to Hostinger Git (Section 3 Step 2)
+  [ ] site/config.php created on server with correct DB credentials (Section 3 Step 3)
+  [ ] Local database exported and imported to Hostinger (Section 4)
+  [ ] site/assets/files/ copied to server via FTP (Section 5)
+  [ ] Folder permissions set (Section 5)
+  [ ] PHP version and memory_limit checked (Section 7)
+  [ ] Tested login on live domain
+  [ ] Tested PDF generation on live domain
+  [ ] config->debug set to FALSE in production config.php (Section 3 Step 3)
+
+  SECURITY REMINDER:
+  Delete any .php migration or diagnostic scripts from the server root
+  (migrate_procedure_fields.php, check_*.php, etc.) before going live.
+  These expose your database structure if left accessible.
+
+================================================================================

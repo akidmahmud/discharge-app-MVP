@@ -1,0 +1,13 @@
+--- DB TABLE CHECK ---
+Table field_ip_number: EXISTS
+Table field_proc_date: MISSING
+Table field_surgery_date: MISSING
+Table field_investigation_date: MISSING
+Table field_review_date: MISSING
+Table field_patient_id: EXISTS
+Table field_case_status: MISSING
+Template procedure: MISSING
+Template operation-note: MISSING
+Template investigation: MISSING
+Template patient-record: EXISTS
+Template admission-record: EXISTS

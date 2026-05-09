@@ -27,7 +27,7 @@ Create a file named ".gitignore" in the project root with this content:
 /site/config.php
 
 # OS junk
-.DS_Store
+.DS_Storeasdad
 Thumbs.db
 --------------------------------------------------------------------------
 

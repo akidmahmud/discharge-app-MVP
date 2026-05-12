@@ -133,6 +133,24 @@
   }
 
   function init() {
+    // Global toggle for upload zones
+    document.addEventListener('click', function (e) {
+      var trigger = e.target.closest('[data-toggle-upload]');
+      if (!trigger) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var targetSelector = trigger.getAttribute('data-toggle-upload');
+      var moduleEl = document.querySelector(targetSelector);
+      if (!moduleEl) return;
+      var zone = moduleEl.querySelector('[data-upload-zone]');
+      if (!zone) return;
+
+      var opening = !zone.classList.contains('is-active');
+      zone.classList.toggle('is-active', opening);
+      trigger.classList.toggle('btn--active', opening);
+      zone.style.display = opening ? 'flex' : 'none';
+    });
+
     document.querySelectorAll('[data-upload-zone]').forEach(function (zone) {
       var input = zone.querySelector('input[type="file"]');
       if (!input) return;

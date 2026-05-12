@@ -73,11 +73,7 @@ return [
         'default_enabled' => 1,
         'default_mandatory' => 0,
         'fields' => [
-            'vitals_pulse' => 'Pulse',
-            'vitals_bp' => 'Blood Pressure',
-            'vitals_temp' => 'Temperature',
-            'vitals_spo2' => 'SpO2',
-            'inspection' => 'General Findings',
+'inspection' => 'General Findings',
             'examination_findings' => 'Local Findings',
         ],
         'actions' => [

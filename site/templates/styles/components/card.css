@@ -107,7 +107,7 @@
 }
 
 .case-module.is-collapsed > .card__body {
-  display: none;
+  display: none !important;
 }
 
 .case-module.is-complete > .card__body {

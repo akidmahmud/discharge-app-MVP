@@ -91,51 +91,12 @@
   .case-layout {
     display: grid;
     grid-template-columns: 1fr !important;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: 1fr;
   }
 
+  /* Hide the Workflow Tracker sidebar entirely on mobile */
   .case-sidebar {
-    width: 100%;
-    position: static;
-    max-height: none;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 12px;
-    border-right: none;
-    border-bottom: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .case-progress__list {
-    flex-direction: row;
-    gap: 8px;
-    min-width: max-content;
-  }
-
-  .case-progress__item {
-    flex-shrink: 0;
-    min-width: 84px;
-  }
-
-  .case-progress__link {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 72px;
-    gap: 8px;
-    border-left: 0;
-    border-bottom: 3px solid transparent;
-  }
-
-  .case-progress__item.is-active .case-progress__link {
-    border-bottom-color: var(--color-brand-500);
-  }
-
-  .case-progress__content {
-    flex-direction: column;
-    gap: 4px;
+    display: none !important;
   }
 
   .case-workspace {
@@ -502,5 +463,212 @@
     color: var(--color-text-meta);
     flex-shrink: 0;
     margin-left: 2px;
+  }
+}
+
+/* ==============================================================
+   14. DASHBOARD MOBILE ADMISSIONS
+   Replaces the desktop table on small screens with card list.
+   ============================================================== */
+@media (max-width: 768px) {
+  .dashboard-admissions-section,
+  .desktop-patient-table {
+    display: none !important;
+  }
+  .dashboard-mobile-admissions,
+  .mobile-patient-list {
+    display: block;
+    padding: 0 var(--space-4);
+  }
+}
+
+@media (min-width: 769px) {
+  .dashboard-mobile-admissions,
+  .mobile-patient-list {
+    display: none;
+  }
+}
+
+.mpc {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--color-bg-elevated);
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 10px;
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  position: relative;
+  transition: transform 0.1s ease, border-color 0.1s ease;
+}
+
+.mpc:active {
+  transform: scale(0.98);
+  border-color: var(--color-brand-400);
+}
+
+.mpc__avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: var(--color-brand-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mpc__avatar--female {
+  background: #fdf2f8; /* pink-50 */
+}
+
+.mpc__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.mpc__name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mpc__ip {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-body);
+}
+
+.mpc__reg {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.mpc__diag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mpc__diag svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.mpc__diag--pending {
+  color: #ca8a04; /* yellow-600 */
+}
+
+.mpc__side {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.mpc__dates {
+  font-size: 11px;
+  color: var(--color-text-meta);
+  line-height: 1.4;
+}
+
+.mpc__dates p {
+  margin: 0;
+}
+
+.mpc__dates span {
+  color: var(--color-text-body);
+  font-weight: 500;
+}
+
+.mpc__chevron {
+  color: var(--color-text-meta);
+  opacity: 0.5;
+  margin-left: 4px;
+}
+
+.mobile-patient-list__empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+/* ==============================================================
+   15. STACKABLE DATA TABLES
+   Transforms tables into cards using data-label on mobile.
+   ============================================================== */
+@media (max-width: 600px) {
+  .data-table:not(.no-stack) {
+    display: block;
+    width: 100%;
+    background: transparent !important;
+  }
+
+  .data-table:not(.no-stack) thead {
+    display: none;
+  }
+
+  .data-table:not(.no-stack) tbody {
+    display: block;
+  }
+
+  .data-table:not(.no-stack) tr {
+    display: block;
+    margin-bottom: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-elevated) !important;
+    overflow: hidden;
+  }
+
+  .data-table:not(.no-stack) td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--color-bg-subtle);
+    white-space: normal;
+    text-align: right;
+    font-size: 13px;
+    min-height: auto;
+  }
+
+  .data-table:not(.no-stack) td:last-child {
+    border-bottom: none;
+  }
+
+  .data-table:not(.no-stack) td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--color-text-meta);
+    margin-right: 12px;
+    text-align: left;
+    letter-spacing: 0.5px;
+  }
+
+  .data-table:not(.no-stack) .cell--action {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  
+  .data-table:not(.no-stack) .cell--action::before {
+    margin-right: auto;
   }
 }

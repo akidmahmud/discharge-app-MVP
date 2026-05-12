@@ -1022,6 +1022,21 @@ hr {
   margin-top: 8px;
 }
 
+.case-upload-zone {
+  display: none;
+  margin-top: 12px;
+}
+
+.case-upload-zone.is-active {
+  display: flex;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .case-duplicate-note {
   margin-top: 6px;
   font-size: var(--font-size-12);

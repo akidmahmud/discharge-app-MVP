@@ -4,6 +4,31 @@
       <span class="badge badge--dc-draft">Step 7</span>
       <h2 class="card__title">Operation Note</h2>
     </div>
+    <div class="card__action">
+      <button class="btn btn--secondary btn--sm" type="button" data-toggle-upload="#module-8">
+        <i data-lucide="upload" aria-hidden="true" style="width:14px;height:14px;"></i>
+        <span>Upload</span>
+      </button>
+    </div>
+  </div>
+  <div class="case-upload-zone case-upload-zone--compact" data-upload-zone="clinical-photos" style="display:none;margin:0 16px;border-radius:0;border-left:none;border-right:none;border-top:none;">
+    <i data-lucide="upload-cloud" aria-hidden="true"></i>
+    <div class="case-upload-zone__title">Intra-operative Media</div>
+    <div class="t-meta">Upload photo or video snapshot for this case</div>
+    <input type="file" accept="image/*" multiple />
+    <div class="case-upload-zone__results">
+      <?php foreach ($case->clinical_images as $file): ?>
+      <?php $isImg = $file->ext && in_array(strtolower($file->ext), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg']); ?>
+      <div class="case-upload-result">
+        <?php if ($isImg && method_exists($file, 'size')): ?>
+        <img src="<?= $file->size(96, 96)->url ?>" alt="">
+        <?php else: ?>
+        <span class="case-upload-result__icon"><i data-lucide="file-text" aria-hidden="true" style="width:24px;height:24px"></i></span>
+        <?php endif; ?>
+        <a href="<?= $file->url ?>" target="_blank" class="case-upload-result__link"><?= $sanitizer->entities($file->basename) ?></a>
+      </div>
+      <?php endforeach; ?>
+    </div>
   </div>
   <div class="card__body layout-stack layout-stack--gap-4">
     <?php foreach ($operationNoteEntries as $operationNoteEntry): ?>
@@ -147,26 +172,6 @@
             <span class="field__label">Closure</span>
             <textarea class="textarea" name="closure_details"><?= $sanitizer->entities((string) ($opNote ? $opNote->closure_details : '')) ?></textarea>
           </label>
-
-          <div class="case-upload-zone case-upload-zone--compact" data-upload-zone="clinical-photos">
-            <i data-lucide="upload-cloud" aria-hidden="true"></i>
-            <div class="case-upload-zone__title">Intra-operative Media</div>
-            <div class="t-meta">Upload photo or video snapshot for this case media bucket</div>
-            <input type="file" accept="image/*" multiple />
-            <div class="case-upload-zone__results">
-              <?php foreach ($case->clinical_images as $file): ?>
-              <?php $isImg = $file->ext && in_array(strtolower($file->ext), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg']); ?>
-              <div class="case-upload-result">
-                <?php if ($isImg && method_exists($file, 'size')): ?>
-                <img src="<?= $file->size(96, 96)->url ?>" alt="">
-                <?php else: ?>
-                <span class="case-upload-result__icon"><i data-lucide="file-text" aria-hidden="true" style="width:24px;height:24px"></i></span>
-                <?php endif; ?>
-                <a href="<?= $file->url ?>" target="_blank" class="case-upload-result__link"><?= $sanitizer->entities($file->basename) ?></a>
-              </div>
-              <?php endforeach; ?>
-            </div>
-          </div>
 
           <div class="layout-row layout-row--gap-2 layout-row--end">
             <button class="btn btn-surgery" type="submit">Save Operation Note</button>

@@ -1427,24 +1427,6 @@ if (false) {
   <div class="section-title">Examination</div>
   <div class="text-block"><strong>General Examination:</strong><br><?= $hasText($case->inspection) ? nl2br($sanitizer->entities($case->inspection)) : 'Not recorded' ?></div>
   <div class="text-block"><strong>Local Examination:</strong><br><?= $hasText($case->examination_findings) ? nl2br($sanitizer->entities($case->examination_findings)) : 'Not recorded' ?></div>
-  <?php
-    $vitalRowsForPdf = array_filter([
-      'Pulse' => trim((string) $case->vitals_pulse),
-      'BP' => trim((string) $case->vitals_bp),
-      'Temperature' => trim((string) $case->vitals_temp),
-      'SpO2' => trim((string) $case->vitals_spo2),
-    ]);
-  ?>
-  <?php if ($vitalRowsForPdf): ?>
-  <table class="meta-table">
-    <tr>
-      <?php foreach ($vitalRowsForPdf as $label => $value): ?>
-      <th><?= $sanitizer->entities($label) ?></th>
-      <td><?= $sanitizer->entities($value) ?></td>
-      <?php endforeach; ?>
-    </tr>
-  </table>
-  <?php endif; ?>
   <?php endif; ?>
 
   <?php if ($templateSettings['show_investigations'] === '1'): ?>
@@ -1978,11 +1960,7 @@ if ($input->requestMethod('POST') && $case && $case->id && $activePostAction !==
                 $case->of(false);
                 $case->inspection = $sanitizer->textarea($input->post->inspection);
                 $case->examination_findings = $sanitizer->textarea($input->post->examination_findings);
-                $saveFieldIfExists($case, 'vitals_pulse', $sanitizer->text($input->post->vitals_pulse));
-                $saveFieldIfExists($case, 'vitals_bp', $sanitizer->text($input->post->vitals_bp));
-                $saveFieldIfExists($case, 'vitals_temp', $sanitizer->text($input->post->vitals_temp));
-                $saveFieldIfExists($case, 'vitals_spo2', $sanitizer->text($input->post->vitals_spo2));
-                $case->save();
+$case->save();
                 $session->redirect($buildCaseUrl(['saved' => 'examination'], $getWorkflowAnchor('examination')));
                 break;
 

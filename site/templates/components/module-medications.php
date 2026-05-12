@@ -30,10 +30,10 @@ $isEditingMedications = $editModule === 'medications' || !$hasText($case->medica
         <tbody>
           <?php foreach ($medicationRows as $medication): ?>
           <tr>
-            <td><?= $sanitizer->entities($medication['drug']) ?></td>
-            <td><?= $sanitizer->entities($medication['dose']) ?></td>
-            <td><?= $sanitizer->entities($medication['frequency'] ?? '') ?></td>
-            <td><?= $sanitizer->entities($medication['duration']) ?></td>
+            <td class="cell" data-label="Drug"><?= $sanitizer->entities($medication['drug']) ?></td>
+            <td class="cell" data-label="Strength"><?= $sanitizer->entities($medication['dose']) ?></td>
+            <td class="cell" data-label="Frequency"><?= $sanitizer->entities($medication['frequency'] ?? '') ?></td>
+            <td class="cell" data-label="Duration"><?= $sanitizer->entities($medication['duration']) ?></td>
           </tr>
           <?php endforeach; ?>
         </tbody>

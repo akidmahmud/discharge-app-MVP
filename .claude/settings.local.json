@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"H:\\\\laragon\\\\www\\\\discharge-app\\\\site\\\\templates\" -Recurse -Name)",
+      "Bash(Select-String -Pattern \"upload\")"
+    ]
+  }
+}

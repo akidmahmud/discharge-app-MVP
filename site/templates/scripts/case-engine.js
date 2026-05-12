@@ -74,12 +74,13 @@
   function initModuleCollapse() {
     var modules = document.querySelectorAll('.case-module');
     modules.forEach(function (module) {
+      module.classList.add('is-collapsed');
+
       var header = module.querySelector(':scope > .card__header');
       if (!header) return;
 
       header.addEventListener('click', function (e) {
         if (e.target.closest('a, button, input, textarea, select')) return;
-
         module.classList.toggle('is-collapsed');
       });
     });

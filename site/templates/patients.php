@@ -517,7 +517,9 @@ $tableColumns = [
     <?php include('./components/module-add-patient-standalone.php'); ?>
     <?php endif; ?>
 
-    <?php include('./components/table.php'); ?>
+    <div class="desktop-patient-table">
+      <?php include('./components/table.php'); ?>
+    </div>
 
     <div class="mobile-patient-list" aria-label="Patient list">
       <?php if (empty($tableRows)): ?>

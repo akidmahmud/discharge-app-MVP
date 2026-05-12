@@ -64,16 +64,16 @@ $hceFormNote = $editingHce
             $hceNote    = (string) $hce->hce_note;
           ?>
           <tr>
-            <td class="cell" style="white-space:nowrap;">
+            <td class="cell" data-label="Date" style="white-space:nowrap;">
               <?= $hceDate ? date('d M Y', $hceDate) : '—' ?>
             </td>
-            <td class="cell">
+            <td class="cell" data-label="Tag">
               <span class="badge <?= $hceBadge ?>"><?= $sanitizer->entities($hceTypeStr) ?></span>
             </td>
-            <td class="cell">
+            <td class="cell" data-label="Note">
               <?= $hasText($hceNote) ? nl2br($sanitizer->entities($hceNote)) : '<span class="t-meta">No note</span>' ?>
             </td>
-            <td class="cell cell--action">
+            <td class="cell cell--action" data-label="Actions">
               <a class="btn btn--icon"
                  href="<?= $buildCaseUrl(['edit_hce' => $hce->id], 'module-9') ?>"
                  aria-label="Edit entry"

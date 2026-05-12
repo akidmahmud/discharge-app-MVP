@@ -6,7 +6,34 @@
       <h2 class="card__title">Investigations</h2>
     </div>
     <div class="card__action">
-      <button class="btn btn-diagnosis btn--sm" type="button" data-inline-investigation-trigger>Add Entry</button>
+      <div class="layout-row layout-row--gap-2">
+        <button class="btn btn--secondary btn--sm" type="button" data-toggle-upload="#module-5">
+          <i data-lucide="upload" aria-hidden="true" style="width:14px;height:14px;"></i>
+          <span>Upload</span>
+        </button>
+        <button class="btn btn-diagnosis btn--sm" type="button" data-inline-investigation-trigger>Add Entry</button>
+      </div>
+    </div>
+  </div>
+  <div class="case-upload-zone case-upload-zone--compact" data-upload-zone="investigation-reports" style="display:none;margin:0 16px;border-radius:0;border-left:none;border-right:none;border-top:none;">
+    <i data-lucide="upload-cloud" aria-hidden="true"></i>
+    <div class="case-upload-zone__title">Click to upload or drag &amp; drop</div>
+    <div class="t-meta">Upload Reports / Images</div>
+    <input type="file" accept="image/*,.pdf" multiple />
+    <div class="case-upload-zone__results">
+      <?php if (!empty($investigationReportFiles)): ?>
+        <?php foreach ($investigationReportFiles as $file): ?>
+        <?php $isImg = $file->ext && in_array(strtolower($file->ext), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg']); ?>
+        <div class="case-upload-result">
+          <?php if ($isImg && method_exists($file, 'size')): ?>
+          <img src="<?= $file->size(96, 96)->url ?>" alt="">
+          <?php else: ?>
+          <span class="case-upload-result__icon"><i data-lucide="file-text" aria-hidden="true" style="width:24px;height:24px"></i></span>
+          <?php endif; ?>
+          <a href="<?= $file->url ?>" target="_blank" class="case-upload-result__link"><?= $sanitizer->entities($file->basename) ?></a>
+        </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
   </div>
   <div class="card__body layout-stack layout-stack--gap-4">
@@ -37,11 +64,11 @@
                   <i data-lucide="chevron-down" aria-hidden="true"></i>
                 </button>
               </td>
-              <td class="cell"><?= $investigation->getUnformatted('investigation_date') ? date('d M Y', $investigation->getUnformatted('investigation_date')) : '-' ?></td>
-              <td class="cell"><?= $sanitizer->entities($investigation->investigation_name ?: $investigation->title) ?></td>
-              <td class="cell"><?= $hasText($investigation->investigation_findings) ? $sanitizer->entities($investigation->investigation_findings) : 'No summary recorded' ?></td>
-              <td class="cell"><?= $includeInDischarge ? 'Yes' : 'No' ?></td>
-              <td class="cell">
+              <td class="cell" data-label="Date"><?= $investigation->getUnformatted('investigation_date') ? date('d M Y', $investigation->getUnformatted('investigation_date')) : '-' ?></td>
+              <td class="cell" data-label="Name"><?= $sanitizer->entities($investigation->investigation_name ?: $investigation->title) ?></td>
+              <td class="cell" data-label="Report Summary"><?= $hasText($investigation->investigation_findings) ? $sanitizer->entities($investigation->investigation_findings) : 'No summary recorded' ?></td>
+              <td class="cell" data-label="Include in discharge"><?= $includeInDischarge ? 'Yes' : 'No' ?></td>
+              <td class="cell cell--action" data-label="Actions">
                 <div class="layout-row layout-row--gap-2">
                   <a class="btn btn--icon" href="<?= $buildCaseUrl(['edit_inv' => $investigation->id], 'module-5') ?>" aria-label="Edit investigation">
                     <i data-lucide="square-pen" aria-hidden="true"></i>
@@ -151,26 +178,5 @@
     </form>
     <?php endif; ?>
 
-    <div class="case-upload-zone case-upload-zone--compact" data-upload-zone="investigation-reports" style="min-height:48px;padding:8px 16px;">
-      <i data-lucide="upload-cloud" aria-hidden="true"></i>
-      <div class="case-upload-zone__title">Click to upload or drag &amp; drop</div>
-      <div class="t-meta">Upload Reports / Images</div>
-      <input type="file" accept="image/*,.pdf" multiple />
-      <div class="case-upload-zone__results">
-        <?php if (!empty($investigationReportFiles)): ?>
-          <?php foreach ($investigationReportFiles as $file): ?>
-          <?php $isImg = $file->ext && in_array(strtolower($file->ext), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg']); ?>
-          <div class="case-upload-result">
-            <?php if ($isImg && method_exists($file, 'size')): ?>
-            <img src="<?= $file->size(96, 96)->url ?>" alt="">
-            <?php else: ?>
-            <span class="case-upload-result__icon"><i data-lucide="file-text" aria-hidden="true" style="width:24px;height:24px"></i></span>
-            <?php endif; ?>
-            <a href="<?= $file->url ?>" target="_blank" class="case-upload-result__link"><?= $sanitizer->entities($file->basename) ?></a>
-          </div>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </div>
-    </div>
   </div>
 </section>

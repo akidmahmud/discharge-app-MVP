@@ -222,17 +222,9 @@ foreach ($historyDrugHistoryPages as $drugHistoryPage) {
 
 <!-- EXAMINATION — only if filled -->
 <?php $examText = $case->inspection ?: strip_tags($case->examination_findings); ?>
-<?php if ($examText || $case->vitals_pulse): ?>
+<?php if ($examText): ?>
 <div class="sec">Examination Findings</div>
 <div class="content">
-<?php if ($case->vitals_pulse || $case->vitals_bp): ?>
-<strong>Vitals:</strong>
-<?= $case->vitals_pulse ? "Pulse: {$case->vitals_pulse} " : '' ?>
-<?= $case->vitals_bp ? "| BP: {$case->vitals_bp} " : '' ?>
-<?= $case->vitals_temp ? "| Temp: {$case->vitals_temp}°C " : '' ?>
-<?= $case->vitals_spo2 ? "| SpO2: {$case->vitals_spo2}% " : '' ?>
-<br>
-<?php endif; ?>
 <?php if ($examText): ?><?= nl2br($examText) ?><?php endif; ?>
 <?php
 // Movement fields — only print if NOT "Full" and not empty

@@ -359,6 +359,8 @@ foreach ($filteredAdmissions as $entry) {
     $adm = $entry['admission'];
     $statusId = $entry['status_id'];
     $caseViewUrl = '/case-view/?id=' . (int) $adm->id;
+    $genderRaw = ($adm->parent && $adm->parent->gender) ? $adm->parent->gender : null;
+    $genderTitle = $genderRaw ? (is_object($genderRaw) && isset($genderRaw->title) ? (string) $genderRaw->title : (string) $genderRaw) : '';
     $tableRows[] = [
         'patient' => $adm->parent ? $adm->parent->title : 'Unknown patient',
         'patient_id' => ($adm->parent && $adm->parent->patient_id) ? $adm->parent->patient_id : '',
@@ -371,6 +373,7 @@ foreach ($filteredAdmissions as $entry) {
         'operation_date' => $entry['operation_date'],
         'url' => $caseViewUrl,
         'edit_url' => $adminBase . 'page/edit/?id=' . $adm->id,
+        'gender' => $genderTitle,
     ];
 }
 
@@ -459,11 +462,6 @@ $tableColumns = [
       <h1 class="t-page-heading">Admitted Patients</h1>
       <p class="t-body"><?= $total ?> record<?= $total !== 1 ? 's' : '' ?> <span id="patients-fuzzy-count"></span></p>
     </div>
-    <div class="page-header__actions">
-      <a class="btn btn--neutral" href="<?= $page->url ?>?new_add=1#new-add-patient-module">
-        <span>Add New Patient</span>
-      </a>
-    </div>
   </div>
 
   <div class="page-body layout-stack layout-stack--gap-4">
@@ -475,7 +473,7 @@ $tableColumns = [
     </div>
     <?php endif; ?>
 
-<form method="get" class="card">
+<form method="get" class="card patients-filter-form">
       <div class="layout-row layout-row--gap-3">
         <label class="field" style="flex:1;">
           <span class="field__label">Search</span>
@@ -520,6 +518,42 @@ $tableColumns = [
     <?php endif; ?>
 
     <?php include('./components/table.php'); ?>
+
+    <div class="mobile-patient-list" aria-label="Patient list">
+      <?php if (empty($tableRows)): ?>
+        <p class="mobile-patient-list__empty">No records found.</p>
+      <?php else: foreach ($tableRows as $row):
+        $isFemale = stripos($row['gender'], 'female') !== false;
+        $isPending = $row['diagnosis'] === 'Diagnosis pending';
+      ?>
+      <a class="mpc" href="<?= $sanitizer->entities($row['url']) ?>">
+        <div class="mpc__avatar<?= $isFemale ? ' mpc__avatar--female' : '' ?>" aria-hidden="true">
+          <?php if ($isFemale): ?>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <?php else: ?>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <?php endif; ?>
+        </div>
+        <div class="mpc__body">
+          <div class="mpc__name"><?= $sanitizer->entities($row['patient']) ?></div>
+          <div class="mpc__ip"><?= $sanitizer->entities($row['ip_number']) ?></div>
+          <?php if ($row['patient_id']): ?><div class="mpc__reg">ID: <?= $sanitizer->entities($row['patient_id']) ?></div><?php endif; ?>
+          <div class="mpc__diag<?= $isPending ? ' mpc__diag--pending' : '' ?>">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <?= $sanitizer->entities($row['diagnosis']) ?>
+          </div>
+        </div>
+        <div class="mpc__side">
+          <span class="<?= $sanitizer->entities($row['status_class']) ?>"><?= $sanitizer->entities($row['status_label']) ?></span>
+          <div class="mpc__dates">
+            <p>Op: <?= $row['operation_date'] !== '-' ? '<span>' . $sanitizer->entities($row['operation_date']) . '</span>' : '-' ?></p>
+            <p>Adm: <span><?= $sanitizer->entities($row['admission_date']) ?></span></p>
+          </div>
+        </div>
+        <svg class="mpc__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+      <?php endforeach; endif; ?>
+    </div>
   </div>
   </div>
 

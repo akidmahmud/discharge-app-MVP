@@ -44,9 +44,44 @@
   }
 
   .topbar-center {
-    flex: 1 1 auto;
-    width: auto;
-    min-width: 0;
+    display: none;
+  }
+
+  .topbar-center.is-active {
+    display: flex;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 56%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: var(--color-bg-elevated);
+    padding: 0 12px;
+    align-items: center;
+  }
+
+  .topbar-center.is-active .search-bar {
+    width: 100%;
+    flex: 1;
+  }
+
+  #topbar-search-toggle {
+    display: inline-flex;
+  }
+
+  /* X button sits inside the search field on the right */
+  .search-bar__mobile-close {
+    display: inline-flex;
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: var(--color-text-secondary);
   }
 
   .topbar-user-meta__subtitle {
@@ -242,19 +277,7 @@
 }
 
 @media (max-width: 600px) {
-  .topbar-center {
-    display: none;
-  }
-
-  .topbar-role-chip [data-lucide],
-  .topbar-role-chip > span {
-    display: none;
-  }
-
-  .topbar-role-chip__role {
-    display: inline;
-    font-size: 12px;
-  }
+  /* .topbar-center display is handled by the higher-level media query and .is-active class */
 
   .app-topbar {
     padding: 0 12px;
@@ -309,49 +332,51 @@
     overflow-y: auto;
   }
 
-  .patients-page .data-table thead {
-    display: none;
+  /* Hide desktop tables, show mobile cards */
+  .patients-page .table-wrap,
+  .dashboard-admissions-section {
+    display: none !important;
   }
 
-  .patients-page .data-table tr {
-    display: block;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    margin-bottom: 12px;
-    padding: 12px;
-    background: var(--color-bg-elevated);
-  }
-
-  .patients-page .data-table td {
+  .mobile-patient-list,
+  .dashboard-mobile-admissions {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    padding: 6px 0 !important;
-    border-bottom: 1px solid var(--color-border);
+    flex-direction: column;
+    gap: 10px;
   }
 
-  .patients-page .data-table td:last-child {
-    border-bottom: none;
+  /* Keep stat cards 2-column on small phones (more scannable than 1 col) */
+  .dashboard-page .stat-card-row {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 
-  .patients-page .data-table td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-right: 8px;
-    flex-shrink: 0;
+  /* Quick actions: 2 columns on mobile */
+  .dashboard-quick-actions {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 
-  .patients-page .data-table td.cell--action {
-    justify-content: flex-end;
+  /* Filter form: stack fields vertically and remove overflow-causing widths */
+  .patients-filter-form .layout-row {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: wrap;
   }
 
-  .patients-page .data-table td.cell--action::before {
-    margin-right: auto;
+  .patients-filter-form .field {
+    min-width: 0 !important;
+    width: 100%;
+    flex: 1 1 auto !important;
+  }
+
+  .patients-filter-form .layout-row > div {
+    margin-left: 0 !important;
+    width: 100%;
+    align-self: stretch;
+  }
+
+  .patients-filter-form .layout-row > div .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -369,5 +394,113 @@
   .form-row > .form-col {
     flex: 1 1 100%;
     min-width: 100%;
+  }
+}
+
+/* ── Mobile patient card styles (≤600px) ──────────────────── */
+@media (max-width: 600px) {
+  .mobile-patient-list__empty {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--color-text-meta);
+    font-size: var(--font-size-13);
+  }
+
+  .mpc {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--color-bg-elevated);
+    border-radius: 16px;
+    padding: 14px 12px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.06), 0 4px 12px rgba(15,23,42,0.04);
+    cursor: pointer;
+  }
+
+  .mpc__avatar {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: #eff4ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mpc__avatar--female {
+    background: #fce7f3;
+  }
+
+  .mpc__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mpc__name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mpc__ip {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-brand);
+    margin-top: 1px;
+  }
+
+  .mpc__reg {
+    font-size: 11px;
+    color: var(--color-text-meta);
+    margin-top: 1px;
+  }
+
+  .mpc__diag {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    margin-top: 4px;
+  }
+
+  .mpc__diag--pending {
+    color: var(--color-text-meta);
+    font-style: italic;
+  }
+
+  .mpc__side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .mpc__dates {
+    text-align: right;
+  }
+
+  .mpc__dates p {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .mpc__dates span {
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .mpc__chevron {
+    color: var(--color-text-meta);
+    flex-shrink: 0;
+    margin-left: 2px;
   }
 }

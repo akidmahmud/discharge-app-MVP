@@ -144,10 +144,39 @@ $searchIndexes = [
       </div>
     </nav>
 
+    <div class="sidebar-quick-actions" style="padding: 16px; margin-top: auto; border-top: 1px solid var(--color-border);">
+      <div class="sidebar-quick-actions__label" style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--color-text-meta); margin-bottom: 8px; letter-spacing: 0.5px;">Quick Actions</div>
+      <div class="sidebar-quick-actions__buttons" style="display: flex; flex-direction: column; gap: 8px;">
+        <button type="button" class="btn btn--secondary btn--full" data-modal-trigger="add-patient-modal" style="justify-content: flex-start; padding-left: 12px;">
+          <i data-lucide="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
+          <span>Add New Patient</span>
+        </button>
+      </div>
+    </div>
   </div>
 </aside>
 <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
 <?php endif; ?>
+
+<?php
+$fuzzyDataset = [];
+foreach ($shellAdmissions as $adm) {
+    $diag = 'Diagnosis pending';
+    if ($adm->primary_diagnosis_ref && $adm->primary_diagnosis_ref->id) {
+        $diag = $adm->primary_diagnosis_ref->title;
+    } elseif (trim(strip_tags((string) $adm->diagnosis)) !== '') {
+        $diag = trim(strip_tags((string) $adm->diagnosis));
+    }
+    $fuzzyDataset[] = [
+        'name' => $adm->parent ? (string) $adm->parent->title : '',
+        'pid'  => ($adm->parent && $adm->parent->patient_id) ? (string) $adm->parent->patient_id : '',
+        'ip'   => (string) ($adm->ip_number ?: ''),
+        'diag' => $diag,
+        'url'  => '/case-view/?id=' . (int) $adm->id,
+    ];
+}
+?>
+<script>window.GLOBAL_SEARCH_DATA = <?= json_encode($fuzzyDataset) ?>;</script>
 
 <header class="app-topbar<?= ($hideSidebar || $isCaseView) ? ' app-topbar--sidebar-collapsed' : '' ?>" id="app-topbar" role="banner">
   <div class="topbar-shell">
@@ -155,23 +184,32 @@ $searchIndexes = [
       <button type="button" class="btn btn--icon" aria-label="Open navigation" data-sidebar-toggle>
         <i data-lucide="menu" aria-hidden="true"></i>
       </button>
-      <div class="topbar-user-meta">
-        <span class="topbar-user-meta__name"><?php echo $sanitizer->entities($doctorName); ?></span>
-        <span class="topbar-user-meta__subtitle">Clinical Registry</span>
+    </div>
+
+    <div class="topbar-center" id="topbar-search-container">
+      <div class="search-bar">
+        <span class="search-bar__icon"><i data-lucide="search" aria-hidden="true"></i></span>
+        <input type="text" id="topbar-search-q" class="search-bar__input" placeholder="Search patients, IP, diagnosis..." autocomplete="off">
+        <button type="button" class="search-bar__mobile-close" id="topbar-search-close" aria-label="Close search">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+        <div class="search-results" id="topbar-search-results"></div>
       </div>
     </div>
 
-    
-
     <div class="topbar-right">
-      <span class="topbar-role-chip">
-        <i data-lucide="user" aria-hidden="true"></i>
-        <span><?php echo $sanitizer->entities($doctorName); ?></span>
-        <strong class="topbar-role-chip__role"><?php echo $roleLabel; ?></strong>
-      </span>
+      <button type="button" class="btn btn--icon" id="topbar-search-toggle" aria-label="Open search">
+        <i data-lucide="search" aria-hidden="true"></i>
+      </button>
+
       <a href="/?logout=1" class="btn btn--neutral btn--icon" title="Sign out" aria-label="Sign out">
         <i data-lucide="log-out" aria-hidden="true"></i>
       </a>
     </div>
   </div>
 </header>
+<?php
+$patientFormData = isset($patientFormData) && is_array($patientFormData) ? $patientFormData : [];
+$patientErrors   = isset($patientErrors)   && is_array($patientErrors)   ? $patientErrors   : [];
+include(__DIR__ . '/components/modal-add-patient.php');
+?>

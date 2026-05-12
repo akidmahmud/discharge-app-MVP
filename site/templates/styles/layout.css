@@ -340,29 +340,6 @@
   color: var(--color-text-secondary);
 }
 
-.topbar-role-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 6px 12px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-full);
-  background: var(--color-bg-muted);
-  font-size: var(--font-size-12);
-  line-height: var(--line-height-16);
-  color: var(--color-text-body);
-}
-
-.topbar-role-chip [data-lucide] {
-  width: var(--icon-size-xs);
-  height: var(--icon-size-xs);
-  stroke-width: var(--icon-stroke);
-}
-
-.topbar-role-chip__role {
-  color: var(--color-success-text);
-  font-size: var(--font-size-11);
-}
 
 
 /* ==============================================================

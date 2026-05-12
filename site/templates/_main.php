@@ -85,16 +85,19 @@ if ($isAdminPage)  { $mainClasses[] = 'app-main--admin'; }
 
   </main>
 
+  <!-- Global dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
+  
   <!-- Design token object (Module 1) — must load before main.js -->
   <script src="<?php echo $tplUrl; ?>scripts/tokens.js"></script>
   <!-- Global app behaviours (Module 0) -->
   <script src="<?php echo $tplUrl; ?>scripts/main.js"></script>
+  <script src="<?php echo $tplUrl; ?>scripts/global-search.js"></script>
   <script src="<?php echo $tplUrl; ?>scripts/modal.js"></script>
   <script src="<?php echo $tplUrl; ?>scripts/toast.js"></script>
   
   <script src="<?php echo $tplUrl; ?>scripts/upload.js"></script>
   <?php if ($page->template->name === 'patients') { ?>
-  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
   <script src="<?php echo $tplUrl; ?>scripts/patients-search.js"></script>
   <?php } ?>
   <?php if ($page->template->name === 'admission-record' || $page->template->name === 'case-view') { ?>

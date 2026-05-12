@@ -318,6 +318,12 @@ hr {
 }
 
 
+/* Mobile card lists — hidden on desktop, shown via mobile.css at ≤600px */
+.mobile-patient-list,
+.dashboard-mobile-admissions {
+  display: none;
+}
+
 /* Dashboard foundation */
 .dashboard-page > .page-header {
   margin-bottom: 0;
@@ -343,7 +349,7 @@ hr {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
   background: var(--color-bg-elevated);
-  color: var(--color-success-text);
+  color: var(--color-text-body);
   font-size: var(--font-size-12);
   font-weight: var(--font-weight-medium);
 }
@@ -352,6 +358,12 @@ hr {
   width: var(--icon-size-sm);
   height: var(--icon-size-sm);
   stroke-width: var(--icon-stroke);
+}
+
+.dashboard-role-indicator__role {
+  color: var(--color-success-text);
+  font-size: var(--font-size-11);
+  font-weight: var(--font-weight-medium);
 }
 
 .stat-card--brand .stat-card__icon-wrap {

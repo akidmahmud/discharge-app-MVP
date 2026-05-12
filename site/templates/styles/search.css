@@ -117,3 +117,12 @@
   line-height: var(--line-height-16);
   color: var(--color-text-secondary);
 }
+
+/* Mobile search toggle controls - hidden on desktop */
+#topbar-search-toggle {
+  display: none;
+}
+
+.search-bar__mobile-close {
+  display: none;
+}

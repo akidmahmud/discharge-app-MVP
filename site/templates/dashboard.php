@@ -289,8 +289,9 @@ if ($isMedicalOfficerUser) {
         </div>
         <div class="page-header__actions">
             <span class="dashboard-role-indicator">
-                <i data-lucide="shield-check" aria-hidden="true"></i>
-                <span><?= $dashboardRoleLabel ?></span>
+                <i data-lucide="user" aria-hidden="true"></i>
+                <span><?= $sanitizer->entities($user->name) ?></span>
+                <strong class="dashboard-role-indicator__role"><?= $dashboardRoleLabel ?></strong>
             </span>
         </div>
     </div>
@@ -349,20 +350,12 @@ if ($isMedicalOfficerUser) {
         </section>
 
         <?php if ($canSee('table_recent_admissions')): ?>
-        <section class="card card--flush">
+        <section class="card card--flush dashboard-admissions-section">
             <div class="card__header">
                 <div class="card__title-group">
                     <h2 class="card__title"><?= $tableTitle ?></h2>
                     <p class="card__subtitle"><?= count($displayList) ?> admission<?= count($displayList) === 1 ? '' : 's' ?> in view</p>
                 </div>
-                <?php if ($canSee('table_export_csv')): ?>
-                <div class="card__action">
-                    <a href="<?= $page->url ?>?export=csv" class="btn btn--secondary">
-                        <span class="btn__icon"><i data-lucide="download" aria-hidden="true"></i></span>
-                        <span>Export CSV</span>
-                    </a>
-                </div>
-                <?php endif; ?>
             </div>
             <div class="card__body">
                 <div class="table-wrap">
@@ -437,6 +430,53 @@ if ($isMedicalOfficerUser) {
                 </div>
             </div>
         </section>
+        <div class="dashboard-mobile-admissions">
+            <?php if (!count($displayList)): ?>
+                <p class="mobile-patient-list__empty">No recent admissions.</p>
+            <?php else: foreach ($displayList as $adm):
+                $mStatusId    = $resolveAdmissionStatus($adm);
+                $mStatusLbl   = $statusLabels[$mStatusId] ?? 'Active';
+                $mStatusClass = $statusBadgeClasses[$mStatusId] ?? 'badge badge--case-active';
+                $mDiag        = $adm->primary_diagnosis_ref ? $adm->primary_diagnosis_ref->title : substr(strip_tags((string) $adm->diagnosis), 0, 80);
+                $mProcCount   = $pages->count("template=procedure, parent=$adm");
+                $mAdmittedTs  = $toTimestamp($adm->getUnformatted('admitted_on'));
+                $mAdmDate     = $mAdmittedTs ? date('d M Y', $mAdmittedTs) : '—';
+                $mOpDate      = $adm->get('dashboard_operation_date') ?: '—';
+                $mUrl         = '/case-view/?id=' . (int) $adm->id;
+                $mGenderRaw   = ($adm->parent && $adm->parent->gender) ? $adm->parent->gender : null;
+                $mGender      = $mGenderRaw ? (is_object($mGenderRaw) && isset($mGenderRaw->title) ? (string)$mGenderRaw->title : (string)$mGenderRaw) : '';
+                $mFemale      = stripos($mGender, 'female') !== false;
+                $mPending     = !$mDiag;
+            ?>
+            <a class="mpc" href="<?= $mUrl ?>">
+                <div class="mpc__avatar<?= $mFemale ? ' mpc__avatar--female' : '' ?>" aria-hidden="true">
+                    <?php if ($mFemale): ?>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <?php else: ?>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <?php endif; ?>
+                </div>
+                <div class="mpc__body">
+                    <div class="mpc__name"><?= $sanitizer->entities($adm->parent->title) ?></div>
+                    <div class="mpc__ip"><?= $sanitizer->entities($adm->ip_number ?: '—') ?></div>
+                    <?php if ($adm->parent->patient_id): ?><div class="mpc__reg">ID: <?= $sanitizer->entities($adm->parent->patient_id) ?></div><?php endif; ?>
+                    <div class="mpc__diag<?= (!$mDiag || $mPending) ? ' mpc__diag--pending' : '' ?>">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <?= $mDiag ? $sanitizer->entities($mDiag) : 'Diagnosis pending' ?>
+                    </div>
+                </div>
+                <div class="mpc__side">
+                    <span class="<?= $sanitizer->entities($mStatusClass) ?>"><?= $sanitizer->entities($mStatusLbl) ?></span>
+                    <div class="mpc__dates">
+                        <p>Op: <?= $mOpDate !== '—' ? '<span>' . $sanitizer->entities($mOpDate) . '</span>' : '—' ?></p>
+                        <p>Adm: <span><?= $sanitizer->entities($mAdmDate) ?></span></p>
+                        <?php if ($mProcCount > 0): ?><p><span><?= $mProcCount ?> proc<?= $mProcCount > 1 ? 's' : '' ?></span></p><?php endif; ?>
+                    </div>
+                </div>
+                <svg class="mpc__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+            <?php endforeach; endif; ?>
+        </div>
         <?php endif; ?>
 
     </div>

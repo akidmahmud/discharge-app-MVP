@@ -34,7 +34,7 @@ $modalForm = array_merge($modalDefaults, $patientFormData);
       </div>
       <?php endif; ?>
 
-      <form method="post" action="<?= $page->url ?>">
+      <form method="post" action="/patients/">
         <?= $session->CSRF->renderInput() ?>
         <input type="hidden" name="action" value="add_patient" />
 

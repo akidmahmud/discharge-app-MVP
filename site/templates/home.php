@@ -251,8 +251,9 @@ $csrfVal        = $session->CSRF->getTokenValue();
 
     <!-- Quote -->
     <blockquote class="login-quote" aria-label="Motivational quote">
-      <span class="login-quote__mark" aria-hidden="true">&ldquo;</span>
-      <p class="login-quote__text"><?= htmlspecialchars($quoteText) ?><span class="login-quote__mark login-quote__mark--end" aria-hidden="true">&rdquo;</span></p>
+      <span class="login-quote__mark login-quote__mark--start" aria-hidden="true">&ldquo;</span>
+      <p class="login-quote__text"><?= htmlspecialchars($quoteText) ?></p>
+      <span class="login-quote__mark login-quote__mark--end" aria-hidden="true">&rdquo;</span>
     </blockquote>
 
     <!-- Footer -->

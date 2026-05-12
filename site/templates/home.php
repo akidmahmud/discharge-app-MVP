@@ -266,32 +266,32 @@ $csrfVal        = $session->CSRF->getTokenValue();
   </div><!-- /.login-card -->
 
 </div><!-- /.login-page -->
+
+  <script>
+  (function () {
+    var pwInput   = document.getElementById('login-password');
+    var toggleBtn = document.getElementById('toggle-password');
+    var eyeShow   = document.getElementById('eye-show');
+    var eyeHide   = document.getElementById('eye-hide');
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function () {
+        var isPassword = pwInput.type === 'password';
+        pwInput.type       = isPassword ? 'text'     : 'password';
+        eyeShow.style.display = isPassword ? 'none'  : '';
+        eyeHide.style.display = isPassword ? ''      : 'none';
+        toggleBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+      });
+    }
+
+    var form = document.getElementById('login-form');
+    var btn  = document.getElementById('login-submit');
+    if (form) {
+      form.addEventListener('submit', function () {
+        btn.disabled = true;
+        btn.classList.add('is-loading');
+      });
+    }
+  })();
+  </script>
 </div><!-- #content -->
-
-<script>
-(function () {
-  var pwInput   = document.getElementById('login-password');
-  var toggleBtn = document.getElementById('toggle-password');
-  var eyeShow   = document.getElementById('eye-show');
-  var eyeHide   = document.getElementById('eye-hide');
-
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', function () {
-      var isPassword = pwInput.type === 'password';
-      pwInput.type       = isPassword ? 'text'     : 'password';
-      eyeShow.style.display = isPassword ? 'none'  : '';
-      eyeHide.style.display = isPassword ? ''      : 'none';
-      toggleBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
-    });
-  }
-
-  var form = document.getElementById('login-form');
-  var btn  = document.getElementById('login-submit');
-  if (form) {
-    form.addEventListener('submit', function () {
-      btn.disabled = true;
-      btn.classList.add('is-loading');
-    });
-  }
-})();
-</script>

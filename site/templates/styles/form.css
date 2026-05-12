@@ -31,6 +31,26 @@
   min-width: 0;
 }
 
+.form-col--full {
+  flex: 0 0 100% !important;
+}
+
+.form-col--three-quarters {
+  flex: 0 0 75%;
+}
+
+.form-col--half {
+  flex: 0 0 50%;
+}
+
+.form-col--third {
+  flex: 0 0 33.333%;
+}
+
+.form-col--quarter {
+  flex: 0 0 25%;
+}
+
 .field-group {
   display: flex;
   flex-direction: column;

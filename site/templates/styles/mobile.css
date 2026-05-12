@@ -21,6 +21,22 @@
 
   .app-sidebar.sidebar--mobile-open {
     transform: translateX(0);
+    overflow-y: auto; /* Enable scroll if content is tall */
+  }
+
+  /* Ensure content is visible on mobile even if collapsed on desktop */
+  .app-sidebar .app-brand__name,
+  .app-sidebar .app-brand__subtitle,
+  .app-sidebar .sidebar-quick-actions__label,
+  .app-sidebar .nav-item span,
+  .app-sidebar .sidebar-quick-actions .btn span {
+    display: inline-block !important;
+  }
+
+  .app-sidebar .sidebar-quick-actions {
+    display: block !important;
+    padding: 16px !important;
+    margin-top: var(--space-4); /* Add some gap if auto margin fails */
   }
 
   .app-main {
@@ -670,5 +686,53 @@
   
   .data-table:not(.no-stack) .cell--action::before {
     margin-right: auto;
+  }
+}
+
+/* ==============================================================
+   16. MODAL RESPONSIVENESS
+   Ensures modals look great on small screens.
+   ============================================================== */
+@media (max-width: 600px) {
+  .modal {
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+    border-radius: var(--radius-md);
+  }
+
+  .modal__header {
+    padding: var(--space-4) var(--space-4) 0;
+  }
+
+  .modal__body {
+    padding: var(--space-4);
+    max-height: calc(100vh - 140px);
+  }
+
+  .modal__footer {
+    padding: 0 var(--space-4) var(--space-4);
+    flex-direction: column-reverse;
+    gap: var(--space-2);
+  }
+
+  .modal__footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Force stack inside modals */
+  .modal .form-row {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .modal .form-col {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+  }
+  
+  .modal .card__subtitle {
+    font-size: 11px;
+    line-height: 1.4;
   }
 }

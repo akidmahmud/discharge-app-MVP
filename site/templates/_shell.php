@@ -144,9 +144,9 @@ $searchIndexes = [
       </div>
     </nav>
 
-    <div class="sidebar-quick-actions" style="padding: 16px; margin-top: auto; border-top: 1px solid var(--color-border);">
-      <div class="sidebar-quick-actions__label" style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--color-text-meta); margin-bottom: 8px; letter-spacing: 0.5px;">Quick Actions</div>
-      <div class="sidebar-quick-actions__buttons" style="display: flex; flex-direction: column; gap: 8px;">
+    <div class="sidebar-quick-actions">
+      <div class="sidebar-quick-actions__label">Quick Actions</div>
+      <div class="sidebar-quick-actions__buttons">
         <button type="button" class="btn btn--secondary btn--full" data-modal-trigger="add-patient-modal" style="justify-content: flex-start; padding-left: 12px;">
           <i data-lucide="plus-circle" aria-hidden="true" style="width: 16px; height: 16px;"></i>
           <span>Add New Patient</span>

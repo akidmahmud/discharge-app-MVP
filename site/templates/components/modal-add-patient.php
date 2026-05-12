@@ -16,133 +16,131 @@ $modalDefaults = [
 $modalForm = array_merge($modalDefaults, $patientFormData);
 ?>
 <div class="modal modal--md" data-modal="add-patient-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="add-patient-modal-title">
-  <div class="card card--flush">
-    <div class="card__header">
-      <div class="card__title-group">
-        <h2 class="card__title" id="add-patient-modal-title">Add New Patient</h2>
-        <p class="card__subtitle">Create a patient record and first admission, then jump straight into the case.</p>
-      </div>
-      <button class="btn btn--icon" type="button" data-modal-close aria-label="Close modal">
-        <i data-lucide="x" aria-hidden="true"></i>
-      </button>
+  <div class="modal__header">
+    <div class="card__title-group">
+      <h2 class="card__title" id="add-patient-modal-title">Add New Patient</h2>
+      <p class="card__subtitle">Create a patient record and first admission.</p>
     </div>
+    <button class="btn btn--icon" type="button" data-modal-close aria-label="Close modal">
+      <i data-lucide="x" aria-hidden="true"></i>
+    </button>
+  </div>
 
-    <div class="card__body">
-      <?php if (count($patientErrors)): ?>
-      <div class="field__error" style="display:block;margin-bottom:12px;">
-        <?= $sanitizer->entities(implode(' ', $patientErrors)) ?>
-      </div>
-      <?php endif; ?>
+  <div class="modal__body">
+    <?php if (count($patientErrors)): ?>
+    <div class="field__error" style="display:block;margin-bottom:12px;">
+      <?= $sanitizer->entities(implode(' ', $patientErrors)) ?>
+    </div>
+    <?php endif; ?>
 
-      <form method="post" action="/patients/">
-        <?= $session->CSRF->renderInput() ?>
-        <input type="hidden" name="action" value="add_patient" />
+    <form method="post" action="/patients/" id="add-patient-form">
+      <?= $session->CSRF->renderInput() ?>
+      <input type="hidden" name="action" value="add_patient" />
 
-        <div class="form-section">
-          <div class="form-row">
-            <div class="form-col form-col--full" style="flex:1 1 100%;">
-              <div class="field" id="add-patient-name-field">
-                <label class="field__label" for="add-patient-name">Patient Name <span class="field__required">*</span></label>
-                <input class="input" id="add-patient-name" name="name" type="text" value="<?= $sanitizer->entities($modalForm['name']) ?>" required />
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-col form-col--quarter" style="flex:0 0 25%;">
-              <div class="field" id="add-patient-age-field">
-                <label class="field__label" for="add-patient-age">Age</label>
-                <input class="input" id="add-patient-age" name="age" type="number" min="0" value="<?= $sanitizer->entities((string) $modalForm['age']) ?>" />
-              </div>
-            </div>
-            <div class="form-col form-col--quarter" style="flex:0 0 25%;">
-              <div class="field" id="add-patient-age-unit-field">
-                <label class="field__label" for="add-patient-age-unit">Age Unit</label>
-                <select class="select" id="add-patient-age-unit" name="age_unit">
-                  <option value="Years" <?= $modalForm['age_unit'] === 'Years' ? 'selected' : '' ?>>Years</option>
-                  <option value="Months" <?= $modalForm['age_unit'] === 'Months' ? 'selected' : '' ?>>Months</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-col form-col--half" style="flex:1 1 50%;">
-              <div class="field" id="add-patient-gender-field">
-                <label class="field__label" for="add-patient-gender">Sex</label>
-                <select class="select" id="add-patient-gender" name="gender">
-                  <option value="">Select sex</option>
-                  <option value="Male" <?= $modalForm['gender'] === 'Male' ? 'selected' : '' ?>>M</option>
-                  <option value="Female" <?= $modalForm['gender'] === 'Female' ? 'selected' : '' ?>>F</option>
-                  <option value="Other" <?= $modalForm['gender'] === 'Other' ? 'selected' : '' ?>>Other</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-col form-col--half" style="flex:1 1 50%;">
-              <div class="field" id="add-patient-phone-field">
-                <label class="field__label" for="add-patient-phone">Phone 1</label>
-                <input class="input" id="add-patient-phone" name="phone" type="text" value="<?= $sanitizer->entities($modalForm['phone']) ?>" />
-              </div>
-            </div>
-            <div class="form-col form-col--half" style="flex:1 1 50%;">
-              <div class="field" id="add-patient-phone-secondary-field">
-                <label class="field__label" for="add-patient-phone-secondary">Phone 2</label>
-                <input class="input" id="add-patient-phone-secondary" name="phone_secondary" type="text" value="<?= $sanitizer->entities($modalForm['phone_secondary']) ?>" />
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-col form-col--half" style="flex:1 1 50%;">
-              <div class="field" id="add-patient-guardian-field">
-                <label class="field__label" for="add-patient-guardian">Guardian</label>
-                <input class="input" id="add-patient-guardian" name="guardian" type="text" value="<?= $sanitizer->entities($modalForm['guardian']) ?>" />
-              </div>
-            </div>
-            <div class="form-col form-col--half" style="flex:1 1 50%;"></div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-col form-col--full" style="flex:1 1 100%;">
-              <div class="field" id="add-patient-address-field">
-                <label class="field__label" for="add-patient-address">Address</label>
-                <textarea class="textarea" id="add-patient-address" name="address"><?= $sanitizer->entities($modalForm['address']) ?></textarea>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-col form-col--half" style="flex:1 1 50%;">
-              <div class="field" id="add-patient-bed-field">
-                <label class="field__label" for="add-patient-bed">Bed No</label>
-                <input class="input" id="add-patient-bed" name="bed" type="text" value="<?= $sanitizer->entities($modalForm['bed']) ?>" />
-              </div>
-            </div>
-            <div class="form-col form-col--half" style="flex:1 1 50%;">
-              <div class="field" id="add-patient-consultant-field">
-                <label class="field__label" for="add-patient-consultant">Consultant</label>
-                <input class="input" id="add-patient-consultant" type="text" value="<?= $sanitizer->entities($modalForm['consultant']) ?>" readonly />
-                <input type="hidden" name="consultant" value="<?= $sanitizer->entities($modalForm['consultant']) ?>" />
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-col form-col--half" style="flex:1 1 50%;">
-              <div class="field" id="add-patient-admission-date-field">
-                <label class="field__label" for="add-patient-admission-date">Admission Date <span class="field__required">*</span></label>
-                <input class="input" id="add-patient-admission-date" name="admission_date" type="date" value="<?= $sanitizer->entities($modalForm['admission_date']) ?>" required />
-              </div>
+      <div class="layout-stack layout-stack--gap-4">
+        <div class="form-row">
+          <div class="form-col form-col--full">
+            <div class="field" id="add-patient-name-field">
+              <label class="field__label" for="add-patient-name">Patient Name <span class="field__required">*</span></label>
+              <input class="input" id="add-patient-name" name="name" type="text" value="<?= $sanitizer->entities($modalForm['name']) ?>" required />
             </div>
           </div>
         </div>
 
-        <div class="modal__footer">
-          <button class="btn btn--neutral" type="button" data-modal-close>Cancel</button>
-          <button class="btn btn--primary" type="submit">Save Patient</button>
+        <div class="form-row">
+          <div class="form-col form-col--quarter">
+            <div class="field" id="add-patient-age-field">
+              <label class="field__label" for="add-patient-age">Age</label>
+              <input class="input" id="add-patient-age" name="age" type="number" min="0" value="<?= $sanitizer->entities((string) $modalForm['age']) ?>" />
+            </div>
+          </div>
+          <div class="form-col form-col--quarter">
+            <div class="field" id="add-patient-age-unit-field">
+              <label class="field__label" for="add-patient-age-unit">Age Unit</label>
+              <select class="select" id="add-patient-age-unit" name="age_unit">
+                <option value="Years" <?= $modalForm['age_unit'] === 'Years' ? 'selected' : '' ?>>Years</option>
+                <option value="Months" <?= $modalForm['age_unit'] === 'Months' ? 'selected' : '' ?>>Months</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-col form-col--half">
+            <div class="field" id="add-patient-gender-field">
+              <label class="field__label" for="add-patient-gender">Sex</label>
+              <select class="select" id="add-patient-gender" name="gender">
+                <option value="">Select sex</option>
+                <option value="Male" <?= $modalForm['gender'] === 'Male' ? 'selected' : '' ?>>M</option>
+                <option value="Female" <?= $modalForm['gender'] === 'Female' ? 'selected' : '' ?>>F</option>
+                <option value="Other" <?= $modalForm['gender'] === 'Other' ? 'selected' : '' ?>>Other</option>
+              </select>
+            </div>
+          </div>
         </div>
-      </form>
-    </div>
+
+        <div class="form-row">
+          <div class="form-col form-col--half">
+            <div class="field" id="add-patient-phone-field">
+              <label class="field__label" for="add-patient-phone">Phone 1</label>
+              <input class="input" id="add-patient-phone" name="phone" type="text" value="<?= $sanitizer->entities($modalForm['phone']) ?>" />
+            </div>
+          </div>
+          <div class="form-col form-col--half">
+            <div class="field" id="add-patient-phone-secondary-field">
+              <label class="field__label" for="add-patient-phone-secondary">Phone 2</label>
+              <input class="input" id="add-patient-phone-secondary" name="phone_secondary" type="text" value="<?= $sanitizer->entities($modalForm['phone_secondary']) ?>" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col form-col--half">
+            <div class="field" id="add-patient-guardian-field">
+              <label class="field__label" for="add-patient-guardian">Guardian</label>
+              <input class="input" id="add-patient-guardian" name="guardian" type="text" value="<?= $sanitizer->entities($modalForm['guardian']) ?>" />
+            </div>
+          </div>
+          <div class="form-col form-col--half"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col form-col--full">
+            <div class="field" id="add-patient-address-field">
+              <label class="field__label" for="add-patient-address">Address</label>
+              <textarea class="textarea" id="add-patient-address" name="address"><?= $sanitizer->entities($modalForm['address']) ?></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col form-col--half">
+            <div class="field" id="add-patient-bed-field">
+              <label class="field__label" for="add-patient-bed">Bed No</label>
+              <input class="input" id="add-patient-bed" name="bed" type="text" value="<?= $sanitizer->entities($modalForm['bed']) ?>" />
+            </div>
+          </div>
+          <div class="form-col form-col--half">
+            <div class="field" id="add-patient-consultant-field">
+              <label class="field__label" for="add-patient-consultant">Consultant</label>
+              <input class="input" id="add-patient-consultant" type="text" value="<?= $sanitizer->entities($modalForm['consultant']) ?>" readonly />
+              <input type="hidden" name="consultant" value="<?= $sanitizer->entities($modalForm['consultant']) ?>" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col form-col--half">
+            <div class="field" id="add-patient-admission-date-field">
+              <label class="field__label" for="add-patient-admission-date">Admission Date <span class="field__required">*</span></label>
+              <input class="input" id="add-patient-admission-date" name="admission_date" type="date" value="<?= $sanitizer->entities($modalForm['admission_date']) ?>" required />
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal__footer">
+    <button class="btn btn--neutral" type="button" data-modal-close>Cancel</button>
+    <button class="btn btn--primary" type="submit" form="add-patient-form">Save Patient</button>
   </div>
 </div>
 <script>

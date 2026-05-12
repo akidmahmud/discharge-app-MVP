@@ -234,11 +234,12 @@ $consultantsPage = wire('pages')->get('name=consultants');
 $diagnosesPage = wire('pages')->get('name=diagnoses');
 $quickActions = [
     [
-        'url' => '/patients/?add=1',
+        'url' => '#',
         'icon' => 'user-plus',
         'title' => 'New Patient',
         'subtitle' => 'Register a new patient record',
         'perm' => 'action_new_patient',
+        'modal' => 'add-patient-modal',
     ],
     [
         'url' => '/patients/',
@@ -339,7 +340,7 @@ if ($isMedicalOfficerUser) {
         <section class="dashboard-quick-actions">
             <?php foreach ($quickActions as $action): ?>
                 <?php if (!$canSee($action['perm'])) continue; ?>
-                <a href="<?= $action['url'] ?>" class="card dashboard-quick-action">
+                <a href="<?= $action['url'] ?>" class="card dashboard-quick-action" <?= !empty($action['modal']) ? 'data-modal-trigger="' . $action['modal'] . '"' : '' ?>>
                     <span class="dashboard-quick-action__icon"><i data-lucide="<?= $action['icon'] ?>" aria-hidden="true"></i></span>
                     <span class="dashboard-quick-action__content">
                         <span class="dashboard-quick-action__title"><?= $action['title'] ?></span>
